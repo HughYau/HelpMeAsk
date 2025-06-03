@@ -1,0 +1,142 @@
+/* styles.css */
+#prompt-enhance-button {
+  position: fixed; /* Changed from absolute for better viewport relative positioning */
+  display: flex;   /* For centering icon if using text/emoji */
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  font-size: 16px; /* Adjust if using emoji/icon font */
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 50%; /* Circular button */
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease;
+  z-index: 99999; /* Ensure it's on top */
+}
+
+#prompt-enhance-button:hover {
+  background-color: #0056b3;
+  transform: scale(1.1);
+}
+
+#prompt-enhance-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  transform: scale(1);
+}
+
+#prompt-enhance-button:active {
+  transform: scale(0.95);
+}
+
+/* Modal Styles */
+#prompt-enhancer-modal {
+  display: none; /* Hidden by default */
+  position: fixed;
+  z-index: 100000; /* Higher than the button */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.5); /* Dim background */
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#prompt-enhancer-modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 500px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+#prompt-enhancer-modal-title {
+  margin-top: 0;
+  color: #333;
+  font-size: 1.4em;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+#prompt-enhancer-modal-body {
+  margin-bottom: 20px;
+  flex-grow: 1;
+}
+
+#prompt-enhancer-polished-prompt {
+  width: calc(100% - 16px); /* Account for padding */
+  min-height: 100px;
+  max-height: 200px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+  font-size: 0.95em;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+#prompt-enhancer-modal-status {
+  font-size: 0.9em;
+  min-height: 1.2em; /* Reserve space for status messages */
+}
+
+#prompt-enhancer-modal-actions {
+  display: flex;
+  justify-content: flex-end; /* Align buttons to the right */
+  gap: 10px; /* Space between buttons */
+}
+
+.modal-btn {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.2s ease;
+}
+
+#prompt-enhancer-replace-btn {
+  background-color: #28a745; /* Green */
+  color: white;
+}
+#prompt-enhancer-replace-btn:hover {
+  background-color: #218838;
+}
+
+#prompt-enhancer-regenerate-btn {
+  background-color: #ffc107; /* Yellow */
+  color: #212529;
+}
+#prompt-enhancer-regenerate-btn:hover {
+  background-color: #e0a800;
+}
+
+#prompt-enhancer-copy-btn {
+  background-color: #17a2b8; /* Teal */
+  color: white;
+}
+#prompt-enhancer-copy-btn:hover {
+  background-color: #138496;
+}
+
+.modal-btn.cancel {
+  background-color: #6c757d; /* Gray */
+  color: white;
+}
+.modal-btn.cancel:hover {
+  background-color: #5a6268;
+}
