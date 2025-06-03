@@ -1,28 +1,25 @@
-// content.js (v7 - Resizable, Bilingual, More APIs Prep)
+// content.js (v8 - OpenRouter, No Title, UI Tweaks)
 
 let currentInputElement = null;
 let enhanceButton = null;
 let popoverElement = null;
-let popoverContentElement = null; // Specific reference to the content box
+let popoverContentElement = null;
 let originalPromptForPopover = '';
 const DEBUG_MODE = true;
 let currentTheme = 'light';
-let currentLanguage = 'en'; // Default UI language
+let currentLanguage = 'en';
 
-// --- Localization Strings ---
 const uiStrings = {
     en: {
         enhanceButtonTitle: 'Refine current Prompt (Alt+P)',
-        popoverTitleDefault: 'Refinement Suggestion',
-        popoverTitleLoading: 'Processing...',
-        popoverTitleError: 'Operation Failed',
-        statusLoading: 'Getting refinement suggestion...',
-        statusErrorGeneric: 'Could not get a valid suggestion.',
-        statusErrorInputNeeded: 'Please enter some text to refine!',
+        statusDefault: 'Refinement Suggestion', // Used when prompt is shown
+        statusLoading: 'Processing...',
+        statusError: 'Operation Failed', // Generic error status
+        statusErrorInputNeeded: 'Please enter text to refine!',
         statusCopied: 'Copied!',
         statusCopyFailed: 'Copy failed',
         statusRegenerating: 'Regenerating...',
-        statusRegenerateFailed: 'Regeneration failed: ',
+        statusRegenerateFailed: 'Regen. failed: ',
         buttonReplace: 'Replace',
         buttonRegenerate: 'Refresh',
         buttonCopy: 'Copy',
@@ -32,11 +29,9 @@ const uiStrings = {
     },
     zh: {
         enhanceButtonTitle: '润色当前 Prompt (Alt+P)',
-        popoverTitleDefault: '润色建议',
-        popoverTitleLoading: '处理中...',
-        popoverTitleError: '操作失败',
-        statusLoading: '正在获取润色建议...',
-        statusErrorGeneric: '未能获取有效的润色建议。',
+        statusDefault: '润色建议',
+        statusLoading: '处理中...',
+        statusError: '操作失败',
         statusErrorInputNeeded: '请输入内容后再润色！',
         statusCopied: '已复制！',
         statusCopyFailed: '复制失败',
@@ -55,10 +50,7 @@ function getStr(key) {
     return uiStrings[currentLanguage]?.[key] || uiStrings.en[key] || key;
 }
 
-// --- Utility Functions ---
-function log(...args) {
-    if (DEBUG_MODE) console.log("[PromptEnhancer]", ...args);
-}
+function log(...args) { if (DEBUG_MODE) console.log("[PromptEnhancer]", ...args); }
 
 function isElementVisible(elem) {
     if (!(elem instanceof Element)) return false;
@@ -67,15 +59,11 @@ function isElementVisible(elem) {
            (elem.offsetWidth > 0 || elem.offsetHeight > 0 || elem.getClientRects().length > 0);
 }
 
-// --- Input Element Detection ---
 function findInputElement() {
     const selectors = [
-        'textarea#prompt-textarea', // ChatGPT
-        'div[contenteditable="true"][role="textbox"][aria-multiline="true"]',
-        'div.ql-editor[aria-label="Message"]', // Gemini (old)
-        'div[contenteditable="true"][aria-label*="Send a message"]', // Gemini (new)
-        'div[contenteditable="true"][aria-label*="Prompt for"]',
-        'div.ProseMirror[contenteditable="true"]', // Claude
+        'textarea#prompt-textarea', 'div[contenteditable="true"][role="textbox"][aria-multiline="true"]',
+        'div.ql-editor[aria-label="Message"]', 'div[contenteditable="true"][aria-label*="Send a message"]',
+        'div[contenteditable="true"][aria-label*="Prompt for"]', 'div.ProseMirror[contenteditable="true"]',
         'textarea[placeholder*="Message DeepSeek"]', 'textarea[placeholder*="向 Kimi 提问"]',
         'textarea[data-testid="chat-input"]', 'textarea[aria-label*="Chat message input"]'
     ];
@@ -85,7 +73,6 @@ function findInputElement() {
             if (element && isElementVisible(element)) return element;
         } catch (e) { /* ignore */ }
     }
-    // Fallback for generic textareas and contenteditables
     const textareas = document.querySelectorAll('textarea');
     for (let ta of textareas) {
         if (!ta.closest('#prompt-enhancer-popover') && isElementVisible(ta) && ta.offsetHeight > 20) return ta;
@@ -97,11 +84,9 @@ function findInputElement() {
     return null;
 }
 
-// --- Enhance Button ---
 function createEnhanceButton(targetInputElement) {
     if (document.getElementById('prompt-enhance-button')) {
-        positionEnhanceButton(targetInputElement);
-        return;
+        positionEnhanceButton(targetInputElement); return;
     }
     enhanceButton = document.createElement('button');
     enhanceButton.id = 'prompt-enhance-button';
@@ -123,18 +108,18 @@ function createEnhanceButton(targetInputElement) {
         let promptToEnhance = targetInputElement.tagName.toLowerCase() === 'textarea' ? targetInputElement.value : (targetInputElement.innerText || targetInputElement.textContent);
         if (!promptToEnhance.trim()) {
             openPopover(enhanceButton);
-            showErrorInPopover(getStr('statusErrorInputNeeded'));
+            updatePopoverStatus(getStr('statusErrorInputNeeded'), 'error');
             setTimeout(() => { if (popoverElement && popoverElement.style.display === 'flex') closePopover(); }, 2000);
             return;
         }
         originalPromptForPopover = promptToEnhance;
         openPopover(enhanceButton);
-        showLoadingInPopover(getStr('statusLoading'));
+        showLoadingState(getStr('statusLoading'));
         chrome.runtime.sendMessage({ action: "enhancePrompt", prompt: originalPromptForPopover })
             .then(handleApiResponse)
             .catch(error => {
                 log("Error sending/receiving message:", error);
-                showErrorInPopover(`${getStr('statusErrorGeneric')} ${error.message}`);
+                showErrorState(`${getStr('statusError')} ${error.message}`);
             });
     });
 }
@@ -162,26 +147,20 @@ function positionEnhanceButton(targetInputElement) {
     enhanceButton.style.zIndex = '9990';
 }
 
-// --- Popover, Theming, Localization, Resizing ---
 function applyCurrentUiStrings() {
     if (!popoverContentElement) return;
-    // Titles
-    // Note: Title is set dynamically based on state (loading, error, default)
-    // Buttons
     const replaceBtn = document.getElementById('prompt-enhancer-replace-btn');
     if (replaceBtn) replaceBtn.querySelector('span').textContent = getStr('buttonReplace');
     const regenBtn = document.getElementById('prompt-enhancer-regenerate-btn');
     if (regenBtn) regenBtn.querySelector('span').textContent = getStr('buttonRegenerate');
     const copyBtn = document.getElementById('prompt-enhancer-copy-btn');
     if (copyBtn) copyBtn.querySelector('span').textContent = getStr('buttonCopy');
-    
     const closeBtn = document.getElementById('prompt-enhancer-close-btn');
     if(closeBtn) closeBtn.title = getStr('buttonCloseTitle');
-    
     const themeToggleBtn = document.getElementById('prompt-enhancer-theme-toggle');
     if(themeToggleBtn) themeToggleBtn.title = currentTheme === 'light' ? getStr('buttonThemeToggleLight') : getStr('buttonThemeToggleDark');
-
     if (enhanceButton) enhanceButton.title = getStr('enhanceButtonTitle');
+    // Status text is updated dynamically by showLoadingState, showErrorState, handleApiResponse
 }
 
 function applyTheme(theme) {
@@ -220,11 +199,10 @@ function loadSettings() {
         currentTheme = data.enhancerTheme || 'light';
         currentLanguage = data.uiLanguage || 'en';
         applyTheme(currentTheme);
-        applyCurrentUiStrings(); // Apply strings after language is loaded
+        applyCurrentUiStrings();
         log(`Settings loaded: Theme=${currentTheme}, Language=${currentLanguage}`);
     });
 }
-
 
 function createPopover() {
     if (document.getElementById('prompt-enhancer-popover')) return;
@@ -234,8 +212,8 @@ function createPopover() {
     popoverElement.innerHTML = `
         <div id="prompt-enhancer-popover-content">
             <div id="prompt-enhancer-popover-header">
-                <span id="prompt-enhancer-popover-title"></span>
-                <div>
+                <p id="prompt-enhancer-popover-status"></p> <!-- Status now acts as title area -->
+                <div id="prompt-enhancer-header-actions"> <!-- Container for buttons -->
                     <button id="prompt-enhancer-theme-toggle"></button>
                     <button id="prompt-enhancer-close-btn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -244,21 +222,12 @@ function createPopover() {
             </div>
             <div id="prompt-enhancer-popover-body">
                 <textarea id="prompt-enhancer-polished-prompt" readonly></textarea>
-                <p id="prompt-enhancer-popover-status"></p>
+                <!-- Status message for copy actions, etc., can be placed here or use the header one -->
             </div>
             <div id="prompt-enhancer-popover-actions">
-                <button id="prompt-enhancer-replace-btn" class="popover-action-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
-                    <span></span>
-                </button>
-                <button id="prompt-enhancer-regenerate-btn" class="popover-action-btn">
-                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg>
-                    <span></span>
-                </button>
-                <button id="prompt-enhancer-copy-btn" class="popover-action-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                    <span></span>
-                </button>
+                <button id="prompt-enhancer-replace-btn" class="popover-action-btn"><span></span></button>
+                <button id="prompt-enhancer-regenerate-btn" class="popover-action-btn"><span></span></button>
+                <button id="prompt-enhancer-copy-btn" class="popover-action-btn"><span></span></button>
             </div>
             <div id="prompt-enhancer-resize-handle"></div>
         </div>
@@ -266,9 +235,8 @@ function createPopover() {
     document.body.appendChild(popoverElement);
     popoverContentElement = document.getElementById('prompt-enhancer-popover-content');
     
-    loadSettings(); // Load theme and language, then apply strings
+    loadSettings(); 
 
-    // Event Listeners
     document.getElementById('prompt-enhancer-close-btn').addEventListener('click', closePopover);
     document.getElementById('prompt-enhancer-theme-toggle').addEventListener('click', toggleTheme);
     
@@ -286,12 +254,12 @@ function createPopover() {
 
     document.getElementById('prompt-enhancer-regenerate-btn').addEventListener('click', (event) => {
         event.stopPropagation();
-        showLoadingInPopover(getStr('statusRegenerating'));
+        showLoadingState(getStr('statusRegenerating'));
         chrome.runtime.sendMessage({ action: "enhancePrompt", prompt: originalPromptForPopover })
             .then(handleApiResponse)
             .catch(error => {
                 log("Regeneration error:", error);
-                showErrorInPopover(`${getStr('statusRegenerateFailed')} ${error.message}`);
+                showErrorState(`${getStr('statusRegenerateFailed')} ${error.message}`);
             });
     });
     
@@ -299,17 +267,24 @@ function createPopover() {
         event.stopPropagation();
         const polishedPromptText = document.getElementById('prompt-enhancer-polished-prompt').value;
         navigator.clipboard.writeText(polishedPromptText).then(() => {
-            const statusEl = document.getElementById('prompt-enhancer-popover-status');
-            statusEl.textContent = getStr('statusCopied'); statusEl.className = 'success';
-            setTimeout(() => { statusEl.textContent = ''; statusEl.className = ''; }, 1500);
+            // Use a temporary message in the status or a small toast-like notification
+            const originalStatus = document.getElementById('prompt-enhancer-popover-status').textContent;
+            const originalStatusClass = document.getElementById('prompt-enhancer-popover-status').className;
+            updatePopoverStatus(getStr('statusCopied'), 'success');
+            setTimeout(() => { 
+                // Restore previous status if it was an error or loading, or set to default
+                if (originalStatusClass.includes('error') || originalStatusClass.includes('loading')) {
+                     updatePopoverStatus(originalStatus, originalStatusClass);
+                } else {
+                     updatePopoverStatus(getStr('statusDefault'), ''); // Default state after copy
+                }
+            }, 1500);
         }).catch(err => {
             log('Copy failed: ', err);
-            const statusEl = document.getElementById('prompt-enhancer-popover-status');
-            statusEl.textContent = getStr('statusCopyFailed'); statusEl.className = 'error';
+            updatePopoverStatus(getStr('statusCopyFailed'), 'error');
         });
     });
 
-    // Drag and Resize Listeners
     makeDraggable(popoverContentElement, document.getElementById('prompt-enhancer-popover-header'));
     makeResizable(popoverContentElement, document.getElementById('prompt-enhancer-resize-handle'));
 
@@ -324,22 +299,15 @@ function handleClickOutsidePopover(event) {
         }
     }
 }
-
 function handleEscKey(event) {
-    if (event.key === 'Escape' && popoverElement && popoverElement.style.display === 'flex') {
-        closePopover();
-    }
+    if (event.key === 'Escape' && popoverElement && popoverElement.style.display === 'flex') closePopover();
 }
 
 function openPopover(anchorButton) {
-    if (!popoverElement) createPopover(); // Creates and loads settings
-    else loadSettings(); // Ensure theme/language are fresh if already created
-    
+    if (!popoverElement) createPopover(); else loadSettings();
     if (!popoverContentElement || !anchorButton) return;
 
     popoverElement.style.display = 'flex';
-    
-    // Initial positioning (can be overridden by stored size/pos later)
     const rect = anchorButton.getBoundingClientRect();
     let popoverWidth = popoverContentElement.offsetWidth;
     let popoverHeight = popoverContentElement.offsetHeight;
@@ -349,79 +317,72 @@ function openPopover(anchorButton) {
 
     if (top < window.scrollY + 10) top = window.scrollY + rect.bottom + 10;
     if (left < window.scrollX + 10) left = window.scrollX + 10;
-    if (left + popoverWidth > window.scrollX + window.innerWidth - 10) {
-        left = window.scrollX + window.innerWidth - popoverWidth - 10;
-    }
-     if (top + popoverHeight > window.scrollY + window.innerHeight - 10) {
-        top = window.scrollY + window.innerHeight - popoverHeight - 10;
-    }
+    if (left + popoverWidth > window.scrollX + window.innerWidth - 10) left = window.scrollX + window.innerWidth - popoverWidth - 10;
+    if (top + popoverHeight > window.scrollY + window.innerHeight - 10) top = window.scrollY + window.innerHeight - popoverHeight - 10;
     
     popoverContentElement.style.top = `${top}px`;
     popoverContentElement.style.left = `${left}px`;
 
-    // Apply stored dimensions if available
     chrome.storage.local.get(['popoverWidth', 'popoverHeight'], (data) => {
         if (data.popoverWidth) popoverContentElement.style.width = `${data.popoverWidth}px`;
         if (data.popoverHeight) popoverContentElement.style.height = `${data.popoverHeight}px`;
-        // Re-center or re-position if needed after applying stored size
-        // For simplicity, current positioning logic might suffice, or add more complex logic here
     });
-    applyCurrentUiStrings(); // Ensure strings are correct on open
+    applyCurrentUiStrings();
 }
 
-function closePopover() {
-    if (popoverElement) popoverElement.style.display = 'none';
+function closePopover() { if (popoverElement) popoverElement.style.display = 'none'; }
+
+function updatePopoverStatus(message, type = '') { // type can be 'loading', 'error', 'success' or empty
+    if (!popoverContentElement) return;
+    const statusEl = document.getElementById('prompt-enhancer-popover-status');
+    statusEl.textContent = message;
+    statusEl.className = `prompt-enhancer-status ${type}`; // Add base class for potential general styling
 }
 
-function showLoadingInPopover(message) {
+
+function showLoadingState(message) {
     if (!popoverContentElement) return;
     if (popoverElement.style.display === 'none') openPopover(enhanceButton);
-
-    document.getElementById('prompt-enhancer-popover-title').textContent = getStr('popoverTitleLoading');
+    updatePopoverStatus(message, 'loading');
     document.getElementById('prompt-enhancer-polished-prompt').style.display = 'none';
-    const statusEl = document.getElementById('prompt-enhancer-popover-status');
-    statusEl.textContent = message; statusEl.className = '';
     document.getElementById('prompt-enhancer-popover-actions').style.display = 'none';
 }
 
-function showErrorInPopover(errorMessage) {
+function showErrorState(errorMessage) {
     if (!popoverContentElement) return;
-     if (popoverElement.style.display === 'none') openPopover(enhanceButton);
-
-    document.getElementById('prompt-enhancer-popover-title').textContent = getStr('popoverTitleError');
+    if (popoverElement.style.display === 'none') openPopover(enhanceButton);
+    updatePopoverStatus(errorMessage, 'error');
     document.getElementById('prompt-enhancer-polished-prompt').style.display = 'none';
-    const statusEl = document.getElementById('prompt-enhancer-popover-status');
-    statusEl.textContent = errorMessage; statusEl.className = 'error';
     document.getElementById('prompt-enhancer-popover-actions').style.display = 'none';
 }
 
 function handleApiResponse(response) {
-    if (!popoverContentElement) return;
-    if (popoverElement.style.display === 'none') { log("Popover not visible for API response."); return; }
-
+    if (!popoverContentElement || popoverElement.style.display === 'none') {
+        log("Popover not visible for API response."); return;
+    }
     document.getElementById('prompt-enhancer-polished-prompt').style.display = 'block';
-    const statusEl = document.getElementById('prompt-enhancer-popover-status');
-    statusEl.textContent = ''; statusEl.className = '';
     document.getElementById('prompt-enhancer-popover-actions').style.display = 'flex';
 
     if (response && response.enhancedPrompt) {
-        document.getElementById('prompt-enhancer-popover-title').textContent = getStr('popoverTitleDefault');
+        updatePopoverStatus(getStr('statusDefault'), ''); // Default status when prompt is shown
         document.getElementById('prompt-enhancer-polished-prompt').value = response.enhancedPrompt;
     } else if (response && response.error) {
-        showErrorInPopover(response.error);
+        showErrorState(response.error); // showErrorState already sets the status text and class
     } else {
-        showErrorInPopover(getStr('statusErrorGeneric'));
+        showErrorState(getStr('statusError')); // Generic error if response is malformed
     }
 }
 
-// --- Draggable Functionality ---
 function makeDraggable(element, handle) {
     let offsetX, offsetY, isDragging = false;
     handle.addEventListener('mousedown', (e) => {
+        // Prevent dragging if the click is on a button inside the header
+        if (e.target.closest('button')) return;
         isDragging = true;
         offsetX = e.clientX - element.getBoundingClientRect().left;
         offsetY = e.clientY - element.getBoundingClientRect().top;
         handle.style.cursor = 'grabbing';
+        element.style.userSelect = 'none'; // Prevent text selection during drag
         document.addEventListener('mousemove', onMouseMove);
         document.addEventListener('mouseup', onMouseUp);
     });
@@ -429,7 +390,6 @@ function makeDraggable(element, handle) {
         if (!isDragging) return;
         let newLeft = e.clientX - offsetX;
         let newTop = e.clientY - offsetY;
-        // Boundary checks (optional, can be improved)
         newLeft = Math.max(0, Math.min(newLeft, window.innerWidth - element.offsetWidth));
         newTop = Math.max(0, Math.min(newTop, window.innerHeight - element.offsetHeight));
         element.style.left = `${newLeft}px`;
@@ -438,50 +398,41 @@ function makeDraggable(element, handle) {
     function onMouseUp() {
         isDragging = false;
         handle.style.cursor = 'grab';
+        element.style.userSelect = '';
         document.removeEventListener('mousemove', onMouseMove);
         document.removeEventListener('mouseup', onMouseUp);
     }
 }
 
-// --- Resizable Functionality ---
 function makeResizable(element, resizeHandle) {
     let startX, startY, startWidth, startHeight, isResizing = false;
-    const minWidth = 400; // Minimum dimensions for usability
-    const minHeight = 200;
+    const minWidth = 350; const minHeight = 180;
 
     resizeHandle.addEventListener('mousedown', (e) => {
-        e.preventDefault(); e.stopPropagation(); // Prevent drag from starting
+        e.preventDefault(); e.stopPropagation();
         isResizing = true;
-        startX = e.clientX;
-        startY = e.clientY;
+        startX = e.clientX; startY = e.clientY;
         startWidth = parseInt(document.defaultView.getComputedStyle(element).width, 10);
         startHeight = parseInt(document.defaultView.getComputedStyle(element).height, 10);
+        element.style.userSelect = 'none';
         document.addEventListener('mousemove', onResizeMouseMove);
         document.addEventListener('mouseup', onResizeMouseUp);
     });
-
     function onResizeMouseMove(e) {
         if (!isResizing) return;
         let newWidth = startWidth + (e.clientX - startX);
         let newHeight = startHeight + (e.clientY - startY);
-        
         newWidth = Math.max(minWidth, newWidth);
         newHeight = Math.max(minHeight, newHeight);
-
-        // Optional: Max width/height constraints (e.g., 90vw/80vh from CSS)
-        // newWidth = Math.min(newWidth, window.innerWidth * 0.9);
-        // newHeight = Math.min(newHeight, window.innerHeight * 0.8);
-
         element.style.width = `${newWidth}px`;
         element.style.height = `${newHeight}px`;
     }
-
     function onResizeMouseUp() {
         if (!isResizing) return;
         isResizing = false;
+        element.style.userSelect = '';
         document.removeEventListener('mousemove', onResizeMouseMove);
         document.removeEventListener('mouseup', onResizeMouseUp);
-        // Save new dimensions
         chrome.storage.local.set({
             popoverWidth: parseInt(element.style.width, 10),
             popoverHeight: parseInt(element.style.height, 10)
@@ -489,8 +440,6 @@ function makeResizable(element, resizeHandle) {
     }
 }
 
-
-// --- Initialization and Observation ---
 let debounceTimer;
 function attemptToAttachButton() {
     clearTimeout(debounceTimer);
@@ -517,9 +466,8 @@ const observer = new MutationObserver(attemptToAttachButton);
 
 function initialSetup() {
     log("PromptEnhancer: Initial setup running.");
-    createPopover(); // Creates popover, loads settings, applies strings & theme
+    createPopover(); 
     attemptToAttachButton();
-
     observer.observe(document.body, { childList: true, subtree: true, attributes: false });
 
     document.addEventListener('focusin', (event) => {
@@ -536,7 +484,7 @@ function initialSetup() {
              const currentAnchor = document.getElementById('prompt-enhance-button');
              if (currentAnchor && isElementVisible(currentAnchor)) openPopover(currentAnchor);
              else if (currentInputElement && isElementVisible(currentInputElement)) {
-                const tempButton = enhanceButton || createEnhanceButton(currentInputElement); // Recreate if needed
+                const tempButton = enhanceButton || createEnhanceButton(currentInputElement);
                 if(tempButton) openPopover(tempButton);
              }
         }
@@ -546,7 +494,7 @@ function initialSetup() {
     }, true);
 
     document.addEventListener('keydown', (event) => {
-        if (event.altKey && (event.key === 'p' || event.key === 'P')) { // Alt+P or Alt+Shift+P
+        if (event.altKey && (event.key === 'p' || event.key === 'P')) {
             event.preventDefault(); event.stopPropagation();
             if (enhanceButton && enhanceButton.style.display !== 'none') enhanceButton.click();
             else if (currentInputElement) {
@@ -558,9 +506,8 @@ function initialSetup() {
     log("PromptEnhancer: Initial setup complete.");
 }
 
-// Start after DOM is ready
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => setTimeout(initialSetup, 500));
 } else {
-    setTimeout(initialSetup, 500); // Fallback if already loaded
+    setTimeout(initialSetup, 500);
 }

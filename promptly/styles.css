@@ -1,7 +1,7 @@
-/* styles.css (v7 - Resizable, Wider, Bilingual Prep) */
+/* styles.css (v8 - OpenRouter, No Title, UI Tweaks) */
 
 :root {
-    --enhancer-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --enhancer-font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     /* Light Theme (Default) */
     --enhancer-primary-color-light: #007bff;
     --enhancer-primary-hover-light: #0056b3;
@@ -17,6 +17,8 @@
     --enhancer-error-color-light: #dc3545;
     --enhancer-text-muted-color-light: #6c757d;
     --enhancer-resize-handle-color-light: #adb5bd;
+    --enhancer-textarea-font-family: "SF Mono", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", monospace;
+
 
     /* Dark Theme */
     --enhancer-primary-color-dark: #0d6efd;
@@ -31,7 +33,7 @@
     --enhancer-icon-hover-color-dark: #f8f9fa;
     --enhancer-success-color-dark: #198754;
     --enhancer-error-color-dark: #dc3545;
-    --enhancer-text-muted-color-dark: #86909c; /* Adjusted for better contrast on dark */
+    --enhancer-text-muted-color-dark: #86909c;
     --enhancer-resize-handle-color-dark: #6c757d;
 }
 
@@ -41,81 +43,94 @@
     color: var(--enhancer-text-color, var(--enhancer-text-color-light));
     border: 1px solid var(--enhancer-border-color, var(--enhancer-border-color-light));
     box-shadow: 0 5px 15px var(--enhancer-shadow-color, var(--enhancer-shadow-color-light));
-    min-width: 450px; /* Further increased default width */
-    min-height: 250px; /* Default min height */
-    max-width: 90vw; /* Max width relative to viewport */
-    max-height: 80vh; /* Max height relative to viewport */
+    min-width: 450px; 
+    min-height: 220px; /* Adjusted min-height slightly */
+    max-width: 90vw; 
+    max-height: 80vh; 
     border-radius: 8px;
-    overflow: hidden; /* Important for resize handle and content */
+    overflow: hidden; 
     position: absolute;
-    display: flex; /* Use flex to structure header, body, footer */
-    flex-direction: column; /* Stack them vertically */
-    resize: none; /* Disable browser's default textarea-like resize */
+    display: flex; 
+    flex-direction: column;
+    resize: none; 
 }
 
 #prompt-enhancer-popover-header {
-    border-bottom: 1px solid var(--enhancer-border-color, var(--enhancer-border-color-light));
-    padding: 10px 15px;
+    padding: 8px 12px; /* Reduced padding slightly */
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* Pushes status/actions to ends */
     align-items: center;
-    cursor: grab; /* Indicate the header can be used for dragging */
-}
-#prompt-enhancer-popover-header:active {
-    cursor: grabbing;
+    border-bottom: 1px solid var(--enhancer-border-color, var(--enhancer-border-color-light));
+    min-height: 38px; /* Ensure header has some height */
 }
 
-#prompt-enhancer-popover-title {
-    font-size: 1em;
-    font-weight: 500;
-    margin: 0;
-    color: var(--enhancer-text-color, var(--enhancer-text-color-light));
+/* Status message will now act as a dynamic title/status area */
+#prompt-enhancer-popover-status {
+    font-size: 0.9em; /* Slightly larger for its new role */
+    font-weight: 500; /* More prominent */
+    text-align: left;
+    flex-grow: 1; /* Takes available space */
+    padding: 4px 0;
+    min-height: 1.5em; /* Ensure it's visible */
+    color: var(--enhancer-text-muted-color, var(--enhancer-text-muted-color-light));
+    line-height: 1.4;
 }
+#prompt-enhancer-popover-status.loading,
+#prompt-enhancer-popover-status.error,
+#prompt-enhancer-popover-status.success {
+    /* Specific colorings are applied via JS by adding these classes */
+}
+#prompt-enhancer-popover-status.error {
+     color: var(--enhancer-error-color, var(--enhancer-error-color-light));
+}
+#prompt-enhancer-popover-status.success {
+    color: var(--enhancer-success-color, var(--enhancer-success-color-light));
+}
+
+
+#prompt-enhancer-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px; /* Space between theme toggle and close */
+}
+
 
 #prompt-enhancer-popover-body {
-    padding: 15px;
-    flex-grow: 1; /* Allow body to take available space */
-    overflow-y: auto; /* Scroll if content overflows */
+    padding: 12px; /* Consistent padding */
+    flex-grow: 1; 
+    overflow-y: auto; 
     display: flex;
     flex-direction: column;
 }
 
 #prompt-enhancer-polished-prompt {
-    width: 100%; /* Take full width of its container */
-    flex-grow: 1; /* Allow textarea to grow */
+    width: 100%; 
+    flex-grow: 1; 
     min-height: 100px;
-    padding: 8px;
+    padding: 10px; /* Increased padding for better text appearance */
     border: 1px solid var(--enhancer-border-color, var(--enhancer-border-color-light));
     border-radius: 4px;
-    resize: none; /* Disable textarea's own resize, popover is resizable */
-    font-size: 0.9em;
-    line-height: 1.4;
+    resize: none; 
+    font-size: 0.95em; /* Slightly larger font for readability */
+    line-height: 1.5; /* Improved line spacing */
     margin-bottom: 10px;
     box-sizing: border-box;
-    font-family: var(--enhancer-font-family);
+    font-family: var(--enhancer-textarea-font-family); /* Monospaced for prompts */
     background-color: var(--enhancer-secondary-background-color, var(--enhancer-secondary-background-color-light));
     color: var(--enhancer-text-color, var(--enhancer-text-color-light));
 }
+#prompt-enhancer-polished-prompt:focus {
+    outline: 2px solid var(--enhancer-primary-color-light, #007bff);
+    outline-offset: -1px;
+    border-color: var(--enhancer-primary-color-light, #007bff);
+}
 
-#prompt-enhancer-popover-status {
-    font-size: 0.85em;
-    min-height: 1.2em; /* Keep space for messages */
-    text-align: center;
-    color: var(--enhancer-text-muted-color, var(--enhancer-text-muted-color-light));
-    margin-top: auto; /* Push status to bottom of body if space allows */
-}
-#prompt-enhancer-popover-status.success {
-    color: var(--enhancer-success-color, var(--enhancer-success-color-light));
-}
-#prompt-enhancer-popover-status.error {
-     color: var(--enhancer-error-color, var(--enhancer-error-color-light));
-}
 
 #prompt-enhancer-popover-actions {
     display: flex;
     justify-content: flex-end;
     gap: 8px;
-    padding: 10px 15px; /* Consistent padding */
+    padding: 10px 12px; 
     border-top: 1px solid var(--enhancer-border-color, var(--enhancer-border-color-light));
 }
 
@@ -153,9 +168,8 @@
     width: 12px;
     height: 12px;
     cursor: nwse-resize;
-    z-index: 10000; /* Above other popover content */
+    z-index: 10000; 
 }
-/* Visual for resize handle (optional, can be invisible) */
 #prompt-enhancer-resize-handle::after {
     content: '';
     position: absolute;
@@ -174,9 +188,14 @@
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0 5px;
+    padding: 4px; /* Ensure clickable area */
     display: flex;
     align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+}
+#prompt-enhancer-theme-toggle:hover {
+    background-color: var(--enhancer-border-color, var(--enhancer-border-color-light));
 }
 #prompt-enhancer-theme-toggle svg {
     width: 16px;
@@ -191,9 +210,16 @@
 #prompt-enhancer-close-btn {
   background: none;
   border: none;
-  padding: 5px;
+  padding: 4px; /* Ensure clickable area */
   cursor: pointer;
   line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+#prompt-enhancer-close-btn:hover {
+    background-color: var(--enhancer-border-color, var(--enhancer-border-color-light));
 }
 #prompt-enhancer-close-btn svg {
   stroke: var(--enhancer-icon-color, var(--enhancer-icon-color-light));
@@ -215,29 +241,37 @@
 .prompt-enhancer-dark-theme #prompt-enhancer-popover-header {
     border-bottom-color: var(--enhancer-border-color-dark);
 }
-.prompt-enhancer-dark-theme #prompt-enhancer-popover-title {
-    color: var(--enhancer-text-color-dark);
+
+.prompt-enhancer-dark-theme #prompt-enhancer-popover-status {
+    color: var(--enhancer-text-muted-color-dark);
 }
+.prompt-enhancer-dark-theme #prompt-enhancer-popover-status.error {
+    color: var(--enhancer-error-color-dark);
+}
+.prompt-enhancer-dark-theme #prompt-enhancer-popover-status.success {
+    color: var(--enhancer-success-color-dark);
+}
+
 .prompt-enhancer-dark-theme #prompt-enhancer-close-btn svg {
     stroke: var(--enhancer-icon-color-dark);
 }
 .prompt-enhancer-dark-theme #prompt-enhancer-close-btn:hover svg {
     stroke: var(--enhancer-icon-hover-color-dark);
 }
+.prompt-enhancer-dark-theme #prompt-enhancer-close-btn:hover {
+    background-color: var(--enhancer-border-color-dark);
+}
+
 .prompt-enhancer-dark-theme #prompt-enhancer-polished-prompt {
     background-color: var(--enhancer-secondary-background-color-dark);
     color: var(--enhancer-text-color-dark);
     border-color: var(--enhancer-border-color-dark);
 }
-.prompt-enhancer-dark-theme #prompt-enhancer-popover-status {
-    color: var(--enhancer-text-muted-color-dark);
+.prompt-enhancer-dark-theme #prompt-enhancer-polished-prompt:focus {
+    outline-color: var(--enhancer-primary-color-dark);
+    border-color: var(--enhancer-primary-color-dark);
 }
-.prompt-enhancer-dark-theme #prompt-enhancer-popover-status.success {
-    color: var(--enhancer-success-color-dark);
-}
-.prompt-enhancer-dark-theme #prompt-enhancer-popover-status.error {
-    color: var(--enhancer-error-color-dark);
-}
+
 .prompt-enhancer-dark-theme .popover-action-btn {
     background-color: var(--enhancer-secondary-background-color-dark);
     color: var(--enhancer-secondary-text-color-dark);
@@ -259,54 +293,35 @@
 .prompt-enhancer-dark-theme #prompt-enhancer-theme-toggle:hover svg {
     stroke: var(--enhancer-icon-hover-color-dark);
 }
+.prompt-enhancer-dark-theme #prompt-enhancer-theme-toggle:hover {
+    background-color: var(--enhancer-border-color-dark);
+}
 .prompt-enhancer-dark-theme #prompt-enhancer-resize-handle::after {
     border-bottom-color: var(--enhancer-resize-handle-color-dark);
     border-right-color: var(--enhancer-resize-handle-color-dark);
 }
 
 
-/* --- Floating Enhance Button --- */
+/* --- Floating Enhance Button (largely unchanged, theming applied via JS) --- */
 #prompt-enhance-button {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  padding: 0;
-  background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid #ccc;
-  border-radius: 50%;
-  cursor: pointer;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  transition: all 0.2s ease-in-out;
-  z-index: 9990;
+  position: absolute; display: flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; padding: 0;
+  background-color: rgba(255, 255, 255, 0.8); border: 1px solid #ccc;
+  border-radius: 50%; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: all 0.2s ease-in-out; z-index: 9990;
 }
 #prompt-enhance-button svg {
-  width: 14px;
-  height: 14px;
-  stroke: #007bff;
-  transition: stroke 0.2s ease-in-out;
+  width: 14px; height: 14px; stroke: #007bff; transition: stroke 0.2s ease-in-out;
 }
 #prompt-enhance-button:hover {
-  background-color: #f8f9fa;
-  border-color: #bbb;
-  transform: scale(1.1);
+  background-color: #f8f9fa; border-color: #bbb; transform: scale(1.1);
 }
-#prompt-enhance-button:hover svg {
-    stroke: #0056b3;
-}
+#prompt-enhance-button:hover svg { stroke: #0056b3; }
 
 /* Popover main container (overlay) */
 #prompt-enhancer-popover {
-  display: none;
-  position: fixed;
-  z-index: 9999;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  /* No background on the overlay itself, only on popover-content */
+  display: none; position: fixed; z-index: 9999;
+  left: 0; top: 0; width: 100%; height: 100%;
 }
 
 /* Theming for the floating enhance button */

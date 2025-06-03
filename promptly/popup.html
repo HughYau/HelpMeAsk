@@ -6,7 +6,7 @@
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      width: 320px; /* Slightly wider popup */
+      width: 320px;
       padding: 15px;
       background-color: #f4f6f8;
       color: #333;
@@ -78,13 +78,16 @@
     <option value="deepseek">DeepSeek</option>
     <option value="anthropic">Anthropic (Claude)</option>
     <option value="google">Google (Gemini)</option>
-    </select>
+    <option value="openrouter">OpenRouter (Free)</option>
+  </select>
 
   <label for="apiKey">API Key:</label>
   <input type="password" id="apiKey" placeholder="Enter your API Key">
 
-  <label for="apiModel">Model Name (Optional):</label>
-  <input type="text" id="apiModel" placeholder="e.g., gpt-4o / deepseek-chat">
+  <label for="apiModel">Model Name:</label>
+  <input type="text" id="apiModel" placeholder="e.g., gpt-4o / claude-3-opus-20240229">
+  <small id="modelHint" style="font-size: 0.8em; color: #555; display: block; margin-top: -10px; margin-bottom: 10px;"></small>
+
 
   <button id="saveButton">Save Settings</button>
   <p id="status"></p>

@@ -13,7 +13,8 @@
     "https://api.deepseek.com/*",
     "https://api.openai.com/*",
     "https://api.anthropic.com/*",
-    "https://generativelanguage.googleapis.com/*"
+    "https://generativelanguage.googleapis.com/*",
+    "https://openrouter.ai/*"
   ],
   "background": {
     "service_worker": "background.js"
@@ -37,3 +38,4 @@
   },
   "default_locale": "en"
 }
+
