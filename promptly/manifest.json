@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "智能 Prompt 润色器 (DeepSeek)",
-  "version": "1.2",
-  "description": "通过调用 DeepSeek LLM API 优化您在 AI 对话界面输入的 Prompt，并提供替换或重新生成选项。",
+  "name": "Promptly: Your AI Prompt Optimizer",
+  "version": "0.0.1",
+  "description": "Optimize the Prompt you enter in the AI ​​conversation interface by calling the LLM API and provide replacement or regeneration options.",
   "permissions": [
     "activeTab",
     "scripting",
@@ -22,8 +22,7 @@
         "https://chatgpt.com/*",
         "https://gemini.google.com/*",
         "https://claude.ai/*",
-        "https://*.deepseek.com/*" // 也支持在 DeepSeek自己的对话界面使用
-        // 您可以添加更多 AI 对话网站的 URL 模式
+        "https://*.deepseek.com/*" 
       ],
       "js": ["content.js"],
       "css": ["styles.css"]

@@ -2,17 +2,16 @@
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "enhancePrompt") {
-    const userPrompt = request.prompt; // 这是用户在输入框输入的原始 prompt
+    const userPrompt = request.prompt;
 
-    // 从存储中获取 API 设置
     chrome.storage.sync.get(['apiProvider', 'apiKey', 'apiModel'], async (settings) => {
-      const provider = settings.apiProvider || 'deepseek'; // 默认使用 deepseek
+      const provider = settings.apiProvider || 'deepseek';
       const apiKey = settings.apiKey;
       let model = settings.apiModel;
 
       if (!apiKey) {
         sendResponse({ error: "API 密钥未设置。请在扩展程序的弹出窗口中进行设置。" });
-        return true; // 异步发送响应
+        return true;
       }
 
       let apiUrl = '';
@@ -22,32 +21,35 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         'Authorization': `Bearer ${apiKey}`
       };
 
-      // 这是发送给润色模型的系统指令。确保它是英文的，以获得最佳和最稳定的润色效果。
-      // 指令的目标是让润色模型只返回优化后的 prompt 文本。
-      const refiningSystemPrompt = `You are an expert prompt engineer. Your task is to refine the user's input to make it a clearer, more specific, and more effective prompt for eliciting a high-quality response from a large language model.
+      // Updated System Prompt: Emphasizes transforming input into a usable prompt.
+      const refiningSystemPrompt = `You are an expert prompt engineer. Your primary task is to transform the user's input into a clearer, more specific, and more effective prompt. This refined prompt is intended to be used as input for another large language model to generate a high-quality response.
 Focus on:
-1. Clarity: Ensure the prompt is unambiguous.
-2. Specificity: Add details if necessary to narrow down the scope.
-3. Actionability: Make sure the prompt asks for a concrete output.
-4. Conciseness: Remove any fluff or unnecessary parts.
-5. Completeness: Ensure all necessary information is there.
-The user's original prompt might be in any language. Preserve the original language of the prompt in your refined output.
-Do NOT add any conversational fluff, greetings, self-references, or any text other than the refined prompt itself in your response.
-If the original prompt is already excellent or very short and clear, you can return it as is or with very minimal, impactful adjustments.
-Original prompt to refine is provided by the user.`;
+1. Clarity: Ensure the prompt is unambiguous and easy for an LLM to understand.
+2. Specificity: Add necessary details to narrow the scope and guide the LLM.
+3. Actionability: Frame the prompt to request a concrete output or task.
+4. Conciseness: Remove fluff or unnecessary parts, making it direct.
+5. Completeness: Ensure all critical information for the LLM is present.
+The user's original input might be in any language. Preserve the original language of the core request in your refined prompt.
+IMPORTANT: Your entire response MUST be ONLY the refined prompt text. Do NOT include any conversational phrases, greetings, self-references, explanations of your changes, or any text other than the final, ready-to-use prompt.
+If the original input is already an excellent or very short and clear prompt, you can return it as is or with very minimal, impactful adjustments.
+The goal is to produce a prompt, not to answer the question or fulfill the request in the user's original input.
+Original input to refine into a prompt is: "${userPrompt}"`;
+
 
       if (provider === 'deepseek') {
-        apiUrl = 'https://api.deepseek.com/v1/chat/completions'; // DeepSeek API v1 endpoint
-        model = model || "deepseek-chat"; // DeepSeek 默认模型示例
+        apiUrl = 'https://api.deepseek.com/v1/chat/completions';
+        model = model || "deepseek-chat";
         requestBody = {
           model: model,
           messages: [
-            { "role": "system", "content": refiningSystemPrompt },
-            { "role": "user", "content": userPrompt } // userPrompt 是用户输入的内容
+            // System prompt is now more direct and part of the user message for some models,
+            // but for DeepSeek/OpenAI, a dedicated system message is standard.
+            { "role": "system", "content": refiningSystemPrompt.split("\nOriginal input to refine into a prompt is:")[0].trim() }, // Send the main instruction as system
+            { "role": "user", "content": userPrompt } // Send the user's actual prompt as user content
           ],
-          temperature: 0.6, // 可以调整以获得不同创造性的结果
-          max_tokens: 2048, // 确保足够长以容纳润色后的 prompt
-          stream: false // 我们需要一次性收到完整结果
+          temperature: 0.6,
+          max_tokens: 2048,
+          stream: false
         };
       } else if (provider === 'openai') {
         apiUrl = 'https://api.openai.com/v1/chat/completions';
@@ -55,7 +57,7 @@ Original prompt to refine is provided by the user.`;
         requestBody = {
           model: model,
           messages: [
-            { "role": "system", "content": refiningSystemPrompt },
+            { "role": "system", "content": refiningSystemPrompt.split("\nOriginal input to refine into a prompt is:")[0].trim() },
             { "role": "user", "content": userPrompt }
           ],
           temperature: 0.6,
@@ -77,9 +79,9 @@ Original prompt to refine is provided by the user.`;
           const errorData = await response.json().catch(() => ({ message: "无法解析错误响应" }));
           console.error(`${provider} API 错误:`, response.status, errorData);
           let errorMessage = `API 请求失败: ${response.status} ${response.statusText}. `;
-          if (errorData && errorData.error && errorData.error.message) { // OpenAI style error
+          if (errorData && errorData.error && errorData.error.message) {
             errorMessage += errorData.error.message;
-          } else if (errorData && errorData.message) { // DeepSeek style error or other
+          } else if (errorData && errorData.message) {
              errorMessage += errorData.message;
           }
           sendResponse({ error: errorMessage });
@@ -89,7 +91,6 @@ Original prompt to refine is provided by the user.`;
         const data = await response.json();
         let enhancedPrompt = null;
 
-        // DeepSeek 和 OpenAI (Chat Completions) 的响应结构类似
         if (data.choices && data.choices.length > 0 && data.choices[0].message && data.choices[0].message.content) {
             enhancedPrompt = data.choices[0].message.content.trim();
         }
@@ -105,8 +106,8 @@ Original prompt to refine is provided by the user.`;
         console.error(`调用 ${provider} API 时出错:`, error);
         sendResponse({ error: `网络或其他错误: ${error.message}` });
       }
-      return true; // 必须返回 true 以表明 sendResponse 将被异步调用
+      return true;
     });
-    return true; // 对于异步 sendResponse 至关重要
+    return true;
   }
 });
