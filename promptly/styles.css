@@ -1,142 +1,176 @@
-/* styles.css */
+/* styles.css (v5 - Popover UI and Minimalist Style) */
+
+/* Define some CSS variables for easier theming */
+:root {
+    --enhancer-primary-color: #007bff;
+    --enhancer-primary-hover: #0056b3;
+    --enhancer-text-color: #333;
+    --enhancer-background-color: #fff;
+    --enhancer-border-color: #ddd;
+    --enhancer-shadow-color: rgba(0, 0, 0, 0.15);
+    --enhancer-icon-color: #555;
+    --enhancer-icon-hover-color: #000;
+    --success-color: #28a745;
+    --error-color: #dc3545;
+    --text-muted-color: #6c757d;
+    --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
 #prompt-enhance-button {
-  position: fixed; /* Changed from absolute for better viewport relative positioning */
-  display: flex;   /* For centering icon if using text/emoji */
+  position: absolute; /* Relative to parent (input area) */
+  display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   padding: 0;
-  font-size: 16px; /* Adjust if using emoji/icon font */
-  color: #fff;
-  background-color: #007bff;
-  border: none;
-  border-radius: 50%; /* Circular button */
+  background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent */
+  border: 1px solid var(--enhancer-border-color);
+  border-radius: 50%;
   cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  transition: background-color 0.2s ease-in-out, transform 0.1s ease;
-  z-index: 99999; /* Ensure it's on top */
+  box-shadow: 0 1px 3px var(--enhancer-shadow-color);
+  transition: all 0.2s ease-in-out;
+  z-index: 9990; /* Below popover */
+}
+
+#prompt-enhance-button svg {
+  width: 14px;
+  height: 14px;
+  stroke: var(--enhancer-primary-color);
+  transition: stroke 0.2s ease-in-out;
 }
 
 #prompt-enhance-button:hover {
-  background-color: #0056b3;
+  background-color: #f8f9fa;
+  border-color: #bbb;
   transform: scale(1.1);
 }
-
-#prompt-enhance-button:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
-  transform: scale(1);
+#prompt-enhance-button:hover svg {
+    stroke: var(--enhancer-primary-hover);
 }
 
-#prompt-enhance-button:active {
-  transform: scale(0.95);
-}
-
-/* Modal Styles */
-#prompt-enhancer-modal {
-  display: none; /* Hidden by default */
-  position: fixed;
-  z-index: 100000; /* Higher than the button */
+/* Popover Styles */
+#prompt-enhancer-popover {
+  display: none; /* Hidden by default, shown by JS */
+  position: fixed; /* Fixed position relative to viewport for the overlay part */
+  z-index: 9999; /* On top of most things */
   left: 0;
   top: 0;
-  width: 100%;
+  width: 100%; /* Full screen for click-outside-to-close detection */
   height: 100%;
-  overflow: auto;
-  background-color: rgba(0,0,0,0.5); /* Dim background */
-  align-items: center;
-  justify-content: center;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  /* background-color: rgba(0,0,0,0.1); /* Optional: slight dim for focus */
+  /* No background for the main overlay, only for the content box */
 }
 
-#prompt-enhancer-modal-content {
-  background-color: #fefefe;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-  max-width: 500px;
+#prompt-enhancer-popover-content {
+  position: absolute; /* Positioned by JS */
+  background-color: var(--enhancer-background-color);
+  min-width: 300px;
+  max-width: 450px;
   border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  box-shadow: 0 5px 15px var(--enhancer-shadow-color);
+  border: 1px solid var(--enhancer-border-color);
+  font-family: var(--font-family);
+  color: var(--enhancer-text-color);
+  overflow: hidden; /* Ensures border-radius applies to children */
+}
+
+#prompt-enhancer-popover-header {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  border-bottom: 1px solid var(--enhancer-border-color);
 }
 
-#prompt-enhancer-modal-title {
-  margin-top: 0;
-  color: #333;
-  font-size: 1.4em;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
-  margin-bottom: 15px;
+#prompt-enhancer-popover-title {
+  font-size: 1em;
+  font-weight: 500;
+  margin: 0;
 }
 
-#prompt-enhancer-modal-body {
-  margin-bottom: 20px;
-  flex-grow: 1;
+#prompt-enhancer-close-btn {
+  background: none;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  line-height: 1;
+}
+#prompt-enhancer-close-btn svg {
+  stroke: var(--enhancer-icon-color);
+  width: 14px;
+  height: 14px;
+}
+#prompt-enhancer-close-btn:hover svg {
+  stroke: var(--enhancer-icon-hover-color);
+}
+
+
+#prompt-enhancer-popover-body {
+  padding: 15px;
 }
 
 #prompt-enhancer-polished-prompt {
-  width: calc(100% - 16px); /* Account for padding */
-  min-height: 100px;
-  max-height: 200px;
+  width: calc(100% - 16px); /* Full width minus padding */
+  min-height: 80px;
+  max-height: 150px;
   padding: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--enhancer-border-color);
   border-radius: 4px;
   resize: vertical;
-  font-size: 0.95em;
-  line-height: 1.5;
-  margin-bottom: 10px;
-}
-
-#prompt-enhancer-modal-status {
   font-size: 0.9em;
-  min-height: 1.2em; /* Reserve space for status messages */
+  line-height: 1.4;
+  margin-bottom: 10px;
+  background-color: #f9f9f9;
+  font-family: var(--font-family);
 }
 
-#prompt-enhancer-modal-actions {
+#prompt-enhancer-popover-status {
+  font-size: 0.85em;
+  min-height: 1.2em;
+  color: var(--text-muted-color);
+  text-align: center;
+}
+
+#prompt-enhancer-popover-actions {
   display: flex;
-  justify-content: flex-end; /* Align buttons to the right */
-  gap: 10px; /* Space between buttons */
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 0px 15px 12px 15px; /* Padding only at bottom and sides */
 }
 
-.modal-btn {
-  padding: 8px 15px;
-  border: none;
+.popover-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px; /* Space between icon and text */
+  padding: 6px 10px;
+  border: 1px solid var(--enhancer-border-color);
+  background-color: #fff;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 0.9em;
-  transition: background-color 0.2s ease;
+  font-size: 0.85em;
+  color: var(--enhancer-text-color);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.popover-action-btn svg {
+    stroke: var(--enhancer-icon-color);
+    width: 14px;
+    height: 14px;
 }
 
+.popover-action-btn:hover {
+  background-color: #f0f0f0;
+  border-color: #ccc;
+}
+.popover-action-btn:hover svg {
+    stroke: var(--enhancer-icon-hover-color);
+}
+
+/* Specific button styling if needed */
 #prompt-enhancer-replace-btn {
-  background-color: #28a745; /* Green */
-  color: white;
+    /* background-color: var(--enhancer-primary-color); */
+    /* color: white; */
 }
 #prompt-enhancer-replace-btn:hover {
-  background-color: #218838;
-}
-
-#prompt-enhancer-regenerate-btn {
-  background-color: #ffc107; /* Yellow */
-  color: #212529;
-}
-#prompt-enhancer-regenerate-btn:hover {
-  background-color: #e0a800;
-}
-
-#prompt-enhancer-copy-btn {
-  background-color: #17a2b8; /* Teal */
-  color: white;
-}
-#prompt-enhancer-copy-btn:hover {
-  background-color: #138496;
-}
-
-.modal-btn.cancel {
-  background-color: #6c757d; /* Gray */
-  color: white;
-}
-.modal-btn.cancel:hover {
-  background-color: #5a6268;
+    /* background-color: var(--enhancer-primary-hover); */
 }

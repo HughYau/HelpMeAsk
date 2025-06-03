@@ -27,11 +27,11 @@ _(Insert your UI screenshots here)_
 
 1. Download or clone this repository:
     ```bash
-    git clone https://github.com/yourusername/promptpolish.git
+    git clone https://github.com/HughYau/Promptly_extension.git
     ````
 2. Open your browser (Chrome/Edge/Brave)
 3. Navigate to: `chrome://extensions/` and **enable Developer Mode**
-4. Click **"Load unpacked"**, select the `promptpolish` folder
+4. Click **"Load unpacked"**, select the `promptly` folder
 5. Done! ✅
 
 ---
