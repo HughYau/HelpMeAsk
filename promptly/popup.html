@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Prompt 润色器设置</title>
+  <title>Prompt Refiner Settings</title>
   <meta charset="UTF-8">
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      width: 300px;
+      width: 320px; /* Slightly wider popup */
       padding: 15px;
       background-color: #f4f6f8;
       color: #333;
@@ -15,28 +15,24 @@
       color: #007bff;
       text-align: center;
       margin-top: 0;
+      margin-bottom: 20px;
     }
     label {
       display: block;
-      margin-bottom: 8px;
+      margin-bottom: 5px;
       font-weight: 500;
+      font-size: 0.9em;
     }
     input[type="text"],
-    input[type="password"] {
-      width: calc(100% - 12px);
-      padding: 8px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
+    input[type="password"],
     select {
       width: 100%;
-      padding: 8px;
+      padding: 9px;
       margin-bottom: 15px;
       border: 1px solid #ccc;
       border-radius: 4px;
       box-sizing: border-box;
+      font-size: 0.9em;
     }
     button {
       background-color: #007bff;
@@ -47,34 +43,50 @@
       cursor: pointer;
       width: 100%;
       font-size: 1em;
+      transition: background-color 0.2s;
     }
     button:hover {
       background-color: #0056b3;
     }
     #status {
-      margin-top: 10px;
+      margin-top: 12px;
       font-size: 0.9em;
       text-align: center;
+      min-height: 1.2em;
+    }
+    .section-divider {
+      border-top: 1px solid #ddd;
+      margin-top: 20px;
+      margin-bottom: 20px;
     }
   </style>
 </head>
 <body>
-  <h3>API 设置</h3>
+  <h3>Prompt Refiner Settings</h3>
 
-  <label for="apiProvider">选择 API 服务商:</label>
+  <label for="uiLanguage">UI Language / 界面语言:</label>
+  <select id="uiLanguage">
+    <option value="en">English</option>
+    <option value="zh">中文 (Chinese)</option>
+  </select>
+
+  <div class="section-divider"></div>
+
+  <label for="apiProvider">API Provider:</label>
   <select id="apiProvider">
     <option value="openai">OpenAI</option>
     <option value="deepseek">DeepSeek</option>
+    <option value="anthropic">Anthropic (Claude)</option>
+    <option value="google">Google (Gemini)</option>
     </select>
 
-  <label for="apiKey">API 密钥:</label>
-  <input type="password" id="apiKey" placeholder="请输入您的 API 密钥">
+  <label for="apiKey">API Key:</label>
+  <input type="password" id="apiKey" placeholder="Enter your API Key">
 
-  <label for="apiModel">模型名称 (可选):</label>
-  <input type="text" id="apiModel" placeholder="例如: gpt-3.5-turbo (OpenAI)">
+  <label for="apiModel">Model Name (Optional):</label>
+  <input type="text" id="apiModel" placeholder="e.g., gpt-4o / deepseek-chat">
 
-
-  <button id="saveButton">保存设置</button>
+  <button id="saveButton">Save Settings</button>
   <p id="status"></p>
 
   <script src="popup.js"></script>

@@ -10,8 +10,10 @@
     "offscreen"
   ],
   "host_permissions": [
-    "https://api.deepseek.com/*", // 添加 DeepSeek API 域名
-    "https://api.openai.com/*" // 保留 OpenAI 以便切换
+    "https://api.deepseek.com/*",
+    "https://api.openai.com/*",
+    "https://api.anthropic.com/*",
+    "https://generativelanguage.googleapis.com/*"
   ],
   "background": {
     "service_worker": "background.js"
@@ -22,7 +24,9 @@
         "https://chatgpt.com/*",
         "https://gemini.google.com/*",
         "https://claude.ai/*",
-        "https://*.deepseek.com/*" 
+        "https://*.deepseek.com/*",
+        "https://platform.openai.com/*",
+        "https://console.anthropic.com/*"
       ],
       "js": ["content.js"],
       "css": ["styles.css"]
@@ -30,5 +34,6 @@
   ],
   "action": {
     "default_popup": "popup.html"
-  }
+  },
+  "default_locale": "en"
 }

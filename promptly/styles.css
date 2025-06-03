@@ -1,16 +1,14 @@
-/* styles.css (v6 - Theming, Wider Popover, Text Fixes) */
+/* styles.css (v7 - Resizable, Wider, Bilingual Prep) */
 
-/* Define CSS variables for easier theming */
 :root {
     --enhancer-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-
     /* Light Theme (Default) */
     --enhancer-primary-color-light: #007bff;
     --enhancer-primary-hover-light: #0056b3;
-    --enhancer-text-color-light: #212529; /* Darker text for light background */
+    --enhancer-text-color-light: #212529;
     --enhancer-secondary-text-color-light: #495057;
     --enhancer-background-color-light: #ffffff;
-    --enhancer-secondary-background-color-light: #f8f9fa; /* For textarea, etc. */
+    --enhancer-secondary-background-color-light: #f8f9fa;
     --enhancer-border-color-light: #dee2e6;
     --enhancer-shadow-color-light: rgba(0, 0, 0, 0.1);
     --enhancer-icon-color-light: #495057;
@@ -18,35 +16,41 @@
     --enhancer-success-color-light: #28a745;
     --enhancer-error-color-light: #dc3545;
     --enhancer-text-muted-color-light: #6c757d;
+    --enhancer-resize-handle-color-light: #adb5bd;
 
     /* Dark Theme */
-    --enhancer-primary-color-dark: #0d6efd; /* Slightly brighter blue for dark mode */
+    --enhancer-primary-color-dark: #0d6efd;
     --enhancer-primary-hover-dark: #0a58ca;
-    --enhancer-text-color-dark: #e9ecef; /* Lighter text for dark background */
+    --enhancer-text-color-dark: #e9ecef;
     --enhancer-secondary-text-color-dark: #adb5bd;
-    --enhancer-background-color-dark: #212529; /* Dark background */
-    --enhancer-secondary-background-color-dark: #343a40; /* For textarea, etc. */
+    --enhancer-background-color-dark: #212529;
+    --enhancer-secondary-background-color-dark: #343a40;
     --enhancer-border-color-dark: #495057;
     --enhancer-shadow-color-dark: rgba(255, 255, 255, 0.05);
     --enhancer-icon-color-dark: #adb5bd;
     --enhancer-icon-hover-color-dark: #f8f9fa;
     --enhancer-success-color-dark: #198754;
-    --enhancer-error-color-dark: #dc3545; /* Error color can often stay similar */
-    --enhancer-text-muted-color-dark: #6c757d; /* Muted text might need adjustment or stay */
+    --enhancer-error-color-dark: #dc3545;
+    --enhancer-text-muted-color-dark: #86909c; /* Adjusted for better contrast on dark */
+    --enhancer-resize-handle-color-dark: #6c757d;
 }
 
-/* Apply theme variables */
 #prompt-enhancer-popover-content {
     font-family: var(--enhancer-font-family);
     background-color: var(--enhancer-background-color, var(--enhancer-background-color-light));
     color: var(--enhancer-text-color, var(--enhancer-text-color-light));
     border: 1px solid var(--enhancer-border-color, var(--enhancer-border-color-light));
     box-shadow: 0 5px 15px var(--enhancer-shadow-color, var(--enhancer-shadow-color-light));
-    min-width: 350px; /* Increased width */
-    max-width: 600px; /* Increased max width */
+    min-width: 450px; /* Further increased default width */
+    min-height: 250px; /* Default min height */
+    max-width: 90vw; /* Max width relative to viewport */
+    max-height: 80vh; /* Max height relative to viewport */
     border-radius: 8px;
-    overflow: hidden;
-    position: absolute; /* Positioned by JS */
+    overflow: hidden; /* Important for resize handle and content */
+    position: absolute;
+    display: flex; /* Use flex to structure header, body, footer */
+    flex-direction: column; /* Stack them vertically */
+    resize: none; /* Disable browser's default textarea-like resize */
 }
 
 #prompt-enhancer-popover-header {
@@ -55,6 +59,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    cursor: grab; /* Indicate the header can be used for dragging */
+}
+#prompt-enhancer-popover-header:active {
+    cursor: grabbing;
 }
 
 #prompt-enhancer-popover-title {
@@ -64,34 +72,37 @@
     color: var(--enhancer-text-color, var(--enhancer-text-color-light));
 }
 
-#prompt-enhancer-close-btn svg {
-    stroke: var(--enhancer-icon-color, var(--enhancer-icon-color-light));
-}
-#prompt-enhancer-close-btn:hover svg {
-    stroke: var(--enhancer-icon-hover-color, var(--enhancer-icon-hover-color-light));
+#prompt-enhancer-popover-body {
+    padding: 15px;
+    flex-grow: 1; /* Allow body to take available space */
+    overflow-y: auto; /* Scroll if content overflows */
+    display: flex;
+    flex-direction: column;
 }
 
 #prompt-enhancer-polished-prompt {
-    width: calc(100% - 18px); /* Full width minus padding and border */
-    min-height: 100px; /* Increased min-height */
-    max-height: 200px; /* Increased max-height */
+    width: 100%; /* Take full width of its container */
+    flex-grow: 1; /* Allow textarea to grow */
+    min-height: 100px;
     padding: 8px;
     border: 1px solid var(--enhancer-border-color, var(--enhancer-border-color-light));
     border-radius: 4px;
-    resize: vertical;
+    resize: none; /* Disable textarea's own resize, popover is resizable */
     font-size: 0.9em;
     line-height: 1.4;
     margin-bottom: 10px;
+    box-sizing: border-box;
     font-family: var(--enhancer-font-family);
     background-color: var(--enhancer-secondary-background-color, var(--enhancer-secondary-background-color-light));
-    color: var(--enhancer-text-color, var(--enhancer-text-color-light)); /* Explicitly set text color */
+    color: var(--enhancer-text-color, var(--enhancer-text-color-light));
 }
 
 #prompt-enhancer-popover-status {
     font-size: 0.85em;
-    min-height: 1.2em;
+    min-height: 1.2em; /* Keep space for messages */
     text-align: center;
     color: var(--enhancer-text-muted-color, var(--enhancer-text-muted-color-light));
+    margin-top: auto; /* Push status to bottom of body if space allows */
 }
 #prompt-enhancer-popover-status.success {
     color: var(--enhancer-success-color, var(--enhancer-success-color-light));
@@ -100,22 +111,63 @@
      color: var(--enhancer-error-color, var(--enhancer-error-color-light));
 }
 
+#prompt-enhancer-popover-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 10px 15px; /* Consistent padding */
+    border-top: 1px solid var(--enhancer-border-color, var(--enhancer-border-color-light));
+}
 
 .popover-action-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85em;
     border: 1px solid var(--enhancer-border-color, var(--enhancer-border-color-light));
     background-color: var(--enhancer-secondary-background-color, var(--enhancer-secondary-background-color-light));
     color: var(--enhancer-secondary-text-color, var(--enhancer-secondary-text-color-light));
+    transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 .popover-action-btn svg {
     stroke: var(--enhancer-icon-color, var(--enhancer-icon-color-light));
+    width: 14px;
+    height: 14px;
 }
 .popover-action-btn:hover {
-  background-color: var(--enhancer-border-color, var(--enhancer-border-color-light)); /* Slight change on hover */
+  background-color: var(--enhancer-border-color, var(--enhancer-border-color-light));
   border-color: var(--enhancer-text-muted-color, var(--enhancer-text-muted-color-light));
 }
 .popover-action-btn:hover svg {
     stroke: var(--enhancer-icon-hover-color, var(--enhancer-icon-hover-color-light));
 }
+
+/* Resize Handle */
+#prompt-enhancer-resize-handle {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    width: 12px;
+    height: 12px;
+    cursor: nwse-resize;
+    z-index: 10000; /* Above other popover content */
+}
+/* Visual for resize handle (optional, can be invisible) */
+#prompt-enhancer-resize-handle::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 6px;
+    height: 6px;
+    border-bottom: 2px solid var(--enhancer-resize-handle-color, var(--enhancer-resize-handle-color-light));
+    border-right: 2px solid var(--enhancer-resize-handle-color, var(--enhancer-resize-handle-color-light));
+    opacity: 0.7;
+}
+
 
 /* Theme toggle button */
 #prompt-enhancer-theme-toggle {
@@ -133,6 +185,23 @@
 }
 #prompt-enhancer-theme-toggle:hover svg {
     stroke: var(--enhancer-icon-hover-color, var(--enhancer-icon-hover-color-light));
+}
+
+/* Close button */
+#prompt-enhancer-close-btn {
+  background: none;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  line-height: 1;
+}
+#prompt-enhancer-close-btn svg {
+  stroke: var(--enhancer-icon-color, var(--enhancer-icon-color-light));
+  width: 14px;
+  height: 14px;
+}
+#prompt-enhancer-close-btn:hover svg {
+  stroke: var(--enhancer-icon-hover-color, var(--enhancer-icon-hover-color-light));
 }
 
 
@@ -190,9 +259,13 @@
 .prompt-enhancer-dark-theme #prompt-enhancer-theme-toggle:hover svg {
     stroke: var(--enhancer-icon-hover-color-dark);
 }
+.prompt-enhancer-dark-theme #prompt-enhancer-resize-handle::after {
+    border-bottom-color: var(--enhancer-resize-handle-color-dark);
+    border-right-color: var(--enhancer-resize-handle-color-dark);
+}
 
 
-/* --- Unchanged styles from previous version --- */
+/* --- Floating Enhance Button --- */
 #prompt-enhance-button {
   position: absolute;
   display: flex;
@@ -202,17 +275,17 @@
   height: 24px;
   padding: 0;
   background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid #ccc; /* Fallback, will be themed by context */
+  border: 1px solid #ccc;
   border-radius: 50%;
   cursor: pointer;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Fallback */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
   transition: all 0.2s ease-in-out;
   z-index: 9990;
 }
 #prompt-enhance-button svg {
   width: 14px;
   height: 14px;
-  stroke: #007bff; /* Fallback */
+  stroke: #007bff;
   transition: stroke 0.2s ease-in-out;
 }
 #prompt-enhance-button:hover {
@@ -221,10 +294,10 @@
   transform: scale(1.1);
 }
 #prompt-enhance-button:hover svg {
-    stroke: #0056b3; /* Fallback */
+    stroke: #0056b3;
 }
 
-/* Popover Styles */
+/* Popover main container (overlay) */
 #prompt-enhancer-popover {
   display: none;
   position: fixed;
@@ -233,29 +306,14 @@
   top: 0;
   width: 100%;
   height: 100%;
+  /* No background on the overlay itself, only on popover-content */
 }
 
-#prompt-enhancer-popover-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  padding: 0px 15px 12px 15px;
-}
-
-.popover-action-btn {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 6px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.85em;
-  transition: background-color 0.2s ease, border-color 0.2s ease;
-}
-/* Ensure enhance button uses theme colors if possible, or defaults if on a page that wipes variables */
+/* Theming for the floating enhance button */
 .prompt-enhancer-light-theme #prompt-enhance-button, #prompt-enhance-button {
   border-color: var(--enhancer-border-color-light, #ddd);
   box-shadow: 0 1px 3px var(--enhancer-shadow-color-light, rgba(0,0,0,0.1));
+  background-color: var(--enhancer-secondary-background-color-light, rgba(255,255,255,0.8));
 }
 .prompt-enhancer-light-theme #prompt-enhance-button svg, #prompt-enhance-button svg {
   stroke: var(--enhancer-primary-color-light, #007bff);
@@ -265,13 +323,13 @@
 }
 
 .prompt-enhancer-dark-theme #prompt-enhance-button {
-  background-color: rgba(52, 58, 64, 0.8); /* Darker transparent bg */
-  border-color: var(--enhancer-border-color-dark);
-  box-shadow: 0 1px 3px var(--enhancer-shadow-color-dark);
+  background-color: var(--enhancer-secondary-background-color-dark, rgba(52, 58, 64, 0.8));
+  border-color: var(--enhancer-border-color-dark, #495057);
+  box-shadow: 0 1px 3px var(--enhancer-shadow-color-dark, rgba(255,255,255,0.05));
 }
 .prompt-enhancer-dark-theme #prompt-enhance-button svg {
-  stroke: var(--enhancer-primary-color-dark);
+  stroke: var(--enhancer-primary-color-dark, #0d6efd);
 }
 .prompt-enhancer-dark-theme #prompt-enhance-button:hover svg {
-    stroke: var(--enhancer-primary-hover-dark);
+    stroke: var(--enhancer-primary-hover-dark, #0a58ca);
 }

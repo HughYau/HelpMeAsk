@@ -1,0 +1,8 @@
+{
+  "extension_name": {
+    "message": "Promptly: Your AI Prompt Optimizer"
+  },
+  "extension_description": {
+    "message": "Optimize the Prompt you enter in the AI ​​conversation interface by calling the LLM API and provide replacement or regeneration options."
+  }
+}
