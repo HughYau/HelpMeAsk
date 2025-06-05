@@ -1,4 +1,4 @@
-// content.js (v9 - With Refinement Style Selector)
+// content.js (v10 - Added Poe and Doubao selectors)
 
 let currentInputElement = null;
 let enhanceButton = null;
@@ -35,7 +35,7 @@ const uiStrings = {
         styleConcise: "Concise",
         styleProgramming: "Programming",
     },
-    zh: {
+    zh: { // 中文翻译
         enhanceButtonTitle: '润色当前 Prompt (Alt+P)',
         statusDefault: '润色建议',
         statusLoading: '处理中...',
@@ -76,6 +76,7 @@ function isElementVisible(elem) {
 function findInputElement() {
     // Prioritized selectors for known platforms
     const selectors = [
+        // Existing selectors
         'textarea#prompt-textarea', // ChatGPT
         'div[contenteditable="true"][role="textbox"][aria-multiline="true"]', // General contenteditable like Gemini
         'div.ql-editor[aria-label="Message"]', // Claude.ai (Quill editor)
@@ -85,23 +86,50 @@ function findInputElement() {
         'textarea[placeholder*="Message DeepSeek"]', // DeepSeek
         'textarea[placeholder*="向 Kimi 提问"]', // Kimi Chat
         'textarea[data-testid="chat-input"]', // Common test ID
-        'textarea[aria-label*="Chat message input"]' // Generic chat input
+        'textarea[aria-label*="Chat message input"]', // Generic chat input
+
+        // --- New Selectors ---
+        // Poe.com: Based on common patterns, might need inspection if this doesn't work.
+        // Poe often uses textareas with dynamic classes, try a more general attribute.
+        'textarea[placeholder*="Talk to"]', // Poe's placeholder often starts with "Talk to..." or similar
+        'textarea[class*="ChatMessageInputView_textInput"]', // More specific if classes are stable
+        'textarea[aria-label*="Chat input"]', // A common aria-label for chat inputs
+
+        // Doubao (豆包) - www.doubao.com: This is a guess, will need inspection if not working.
+        // Chinese websites might use different attributes or structures.
+        'textarea[placeholder*="输入消息"]', // Common Chinese placeholder for "Enter message"
+        'textarea[placeholder*="和豆包说点什么"]', // "Say something to Doubao" - more specific
+        'div[contenteditable="true"][aria-label*="聊天框"]', // "Chat box" in Chinese
+        'textarea#chat-input', // A common ID
+        // Add more specific selectors for Doubao if the above are too generic
+        // e.g., '.chat-input-textarea', 'div.input-area[contenteditable="true"]'
     ];
     for (let selector of selectors) {
         try {
             let element = document.querySelector(selector);
-            if (element && isElementVisible(element)) return element;
+            if (element && isElementVisible(element)) {
+                log("Found input element with selector:", selector, element);
+                return element;
+            }
         } catch (e) { /* ignore query selector errors for complex/invalid selectors on some pages */ }
     }
     // Fallback to more generic textareas and contenteditables
+    log("No specific selector matched, trying generic fallbacks.");
     const textareas = document.querySelectorAll('textarea');
     for (let ta of textareas) {
-        if (!ta.closest('#prompt-enhancer-popover') && isElementVisible(ta) && ta.offsetHeight > 20) return ta;
+        if (!ta.closest('#prompt-enhancer-popover') && isElementVisible(ta) && ta.offsetHeight > 20) {
+             log("Found generic textarea fallback:", ta);
+            return ta;
+        }
     }
     const contentEditables = document.querySelectorAll('div[contenteditable="true"]');
     for (let ce of contentEditables) {
-        if (!ce.closest('#prompt-enhancer-popover') && isElementVisible(ce) && ce.offsetHeight > 20 && (ce.getAttribute('role') === 'textbox' || ce.textContent.length < 2000)) return ce;
+        if (!ce.closest('#prompt-enhancer-popover') && isElementVisible(ce) && ce.offsetHeight > 20 && (ce.getAttribute('role') === 'textbox' || ce.textContent.length < 2000)) {
+            log("Found generic contenteditable fallback:", ce);
+            return ce;
+        }
     }
+    log("No suitable input element found on the page.");
     return null;
 }
 
