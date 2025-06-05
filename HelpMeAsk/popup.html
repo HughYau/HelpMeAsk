@@ -38,84 +38,92 @@
       --divider-color: #E5E7EB; /* 分割线颜色 (类似 Tailwind gray-200) */
     }
 
+    html {
+      box-sizing: border-box;
+      /* 确保html元素不会意外产生滚动条 */
+      overflow: hidden; 
+    }
+    *, *:before, *:after {
+      box-sizing: inherit;
+    }
+
     body {
       font-family: var(--font-family-main);
       background-color: var(--bg-color);
       color: var(--text-color-primary);
       margin: 0;
-      padding: 0; /* 移除内边距，让 container 自己控制 */
-      display: flex;
-      justify-content: center;
-      align-items: flex-start; /* 从顶部开始对齐 */
-      min-height: 100vh;
-      box-sizing: border-box;
-      width: 450px; /* 稍微加宽一点以便容纳Logo和更舒适的布局 */
+      padding: 8px; /* 给body一点padding，让container不紧贴边缘 */
+      /* display: flex; /* 移除flex，让block元素自然排列 */
+      /* justify-content: center; */
+      /* align-items: flex-start; */
+      width: 450px; /* 明确指定宽度 */
+      height: auto; /* 高度由内容决定，但会被浏览器限制 */
+      overflow: hidden; /* 关键：防止body出现滚动条 */
     }
 
     .container {
       background-color: var(--card-bg-color);
-      padding: 20px 28px 28px 28px; /* 上、左右、下 */
+      padding: 20px 28px 24px 28px; /* 略微调整底部padding */
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      width: 100%;
-      max-width: 420px; /* 限制卡片最大宽度 */
-      box-sizing: border-box;
-      margin-top: 16px; /* 与浏览器窗口顶部留出一些间距 */
-      margin-bottom: 16px;
+      width: 100%; /* 继承body的宽度 */
+      /* max-width: 420px; /* 这个可以移除，因为body已经限定了宽度 */
+      /* margin-top: 0; /* 由于body有padding，container不再需要margin-top */
+      /* margin-bottom: 0; */
+      /* 如果内容可能超出，可以启用这两行，但通常popup不希望内部滚动 */
+      /* max-height: 580px; */ /* 例如，限制最大高度 */
+      /* overflow-y: auto; */   /* 如果超出则内部滚动 */
     }
 
     .header {
       display: flex;
       align-items: center;
-      margin-bottom: 28px;
+      margin-bottom: 24px; /* 略微减少与下方内容的间距 */
     }
 
     .logo-container {
       margin-right: 12px;
-      /* 假设你的logo是正方形或接近正方形 */
     }
 
     .logo-container img {
-      width: 48px; /* Logo 尺寸 */
+      width: 48px; 
       height: 48px;
-      border-radius: 8px; /* 轻微圆角 */
+      border-radius: 8px; 
     }
 
     .plugin-title {
-      font-size: 1.6em; /* 约 25.6px */
+      font-size: 1.6em; 
       font-weight: 700;
       color: var(--primary-blue);
       line-height: 1.2;
     }
     .plugin-title small {
-        font-size: 0.6em; /* 副标题/Slogan */
+        font-size: 0.6em; 
         font-weight: 500;
         color: var(--text-color-secondary);
         display: block;
         margin-top: 2px;
     }
 
-
     .form-section-title {
-        font-size: 0.8em; /* 约 12.8px */
+        font-size: 0.8em; 
         font-weight: 600;
         color: var(--primary-blue);
         text-transform: uppercase;
         letter-spacing: 0.05em;
-        margin-top: 24px;
+        margin-top: 20px; /* 减少section title的上边距 */
         margin-bottom: 12px;
         padding-bottom: 6px;
         border-bottom: 1px solid var(--divider-color);
     }
      .form-section-title:first-of-type {
-        margin-top: 0; /* 第一个 section title 不需要上边距 */
+        margin-top: 0; 
     }
-
 
     .form-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr; /* 两列 */
-      gap: 20px 16px; /* 行间距, 列间距 */
+      grid-template-columns: 1fr 1fr; 
+      gap: 18px 16px; /* 略微减少行间距 */
     }
 
     .form-group {
@@ -123,14 +131,14 @@
     }
     
     .form-group.full-width {
-      grid-column: 1 / -1; /* 占据整行 */
+      grid-column: 1 / -1; 
     }
 
     label {
       display: block;
       margin-bottom: 8px;
       font-weight: 500;
-      font-size: 0.95em; /* 约 15.2px, 比之前稍大 */
+      font-size: 0.95em; 
       color: var(--text-color-secondary);
     }
 
@@ -138,11 +146,11 @@
     input[type="password"],
     select {
       width: 100%;
-      padding: 12px 14px; /* 增加内边距 */
+      padding: 12px 14px; 
       border: 1px solid var(--input-border-color);
       border-radius: 8px;
       box-sizing: border-box;
-      font-size: 1em; /* 约 16px */
+      font-size: 1em; 
       font-family: var(--font-family-main);
       background-color: var(--input-bg-color);
       color: var(--text-color-primary);
@@ -151,7 +159,7 @@
     
     input::placeholder {
         color: var(--text-color-placeholder);
-        opacity: 1; /* 确保颜色生效 */
+        opacity: 1; 
     }
 
     input[type="text"]:focus,
@@ -164,33 +172,33 @@
 
     select {
       appearance: none;
-      background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%208l5%205%205-5z%22%20fill%3D%22%236B7280%22%2F%3E%3C%2Fsvg%3E'); /* 灰色箭头 (Tailwind gray-500) */
+      background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%208l5%205%205-5z%22%20fill%3D%22%236B7280%22%2F%3E%3C%2Fsvg%3E'); 
       background-repeat: no-repeat;
       background-position: right 12px center;
-      background-size: 14px; /* 稍微增大箭头 */
-      padding-right: 40px; /* 为箭头留出更多空间 */
+      background-size: 14px; 
+      padding-right: 40px; 
     }
     
     small#modelHint {
-      font-size: 0.875em; /* 约 14px */
+      font-size: 0.875em; 
       color: var(--text-color-secondary);
       display: block;
-      margin-top: 8px;
+      margin-top: 6px; /* 减少与上方元素的间距 */
       line-height: 1.5;
     }
 
     button#saveButton {
       background-color: var(--primary-blue);
       color: var(--button-text-color);
-      padding: 12px 20px; /* 调整按钮内边距 */
+      padding: 12px 20px; 
       border: none;
       border-radius: 8px;
       cursor: pointer;
       width: 100%;
-      font-size: 1.05em; /* 约 16.8px */
+      font-size: 1.05em; 
       font-weight: 600;
       transition: background-color 0.2s, transform 0.1s;
-      margin-top: 28px; /* 与上方元素间距 */
+      margin-top: 24px; /* 略微减少与上方元素的间距 */
     }
 
     button#saveButton:hover {
@@ -201,11 +209,11 @@
     }
 
     .status-message {
-      margin-top: 20px;
-      font-size: 0.9em; /* 约 14.4px */
+      margin-top: 16px; /* 减少与上方元素的间距 */
+      font-size: 0.9em; 
       text-align: center;
-      min-height: 1.5em; /* 确保有足够高度 */
-      padding: 12px;
+      min-height: 1.5em; 
+      padding: 10px; /* 减少padding */
       border-radius: 8px;
       visibility: hidden; 
       opacity: 0;
@@ -227,17 +235,13 @@
       border-color: var(--error-color);
     }
 
-    .divider { /* 这个类名原先存在，这里只是确保它生效或可用于新的地方 */
-      border-top: 1px solid var(--divider-color);
-      margin: 28px 0;
-    }
+    /* 移除了 .divider 类，因为 form-section-title 已经起到了分隔作用 */
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
       <div class="logo-container">
-        <!-- 确保你的icons文件夹中有 helpmeask_logo.png (或你上传的 helpmeask_logo_blue.jpg) -->
         <img src="icons/icon128.png" alt="HelpMeAsk Logo"> 
       </div>
       <div class="plugin-title">
@@ -269,7 +273,7 @@
     </div>
     
     <h4 class="form-section-title" data-i18n-key="sectionTitleApi">API Configuration</h4>
-    <div class="form-group full-width" style="margin-bottom: 20px;"> <!-- API Provider 单独一行，增加底部间距 -->
+    <div class="form-group full-width" style="margin-bottom: 18px;"> 
       <label for="apiProvider" data-i18n-key="labelApiProvider">API Provider</label>
       <select id="apiProvider">
         <option value="openai">OpenAI</option>
@@ -294,7 +298,6 @@
     <div class="form-group full-width" style="margin-top: -10px;"> 
          <small id="modelHint"></small>
     </div>
-
 
     <button id="saveButton" data-i18n-key="buttonSaveSettings" class="full-width">Save Settings</button>
     <p id="status" class="status-message"></p>

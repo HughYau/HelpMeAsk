@@ -1,6 +1,7 @@
 # HelpMeAsk ✨🗣️
 
 **问得好，答得妙。**
+[English Version](./README.md)
 
 **HelpMeAsk** 是一款轻巧的浏览器扩展程序，旨在帮助您在将问题发送给 ChatGPT、Gemini、Claude、DeepSeek、豆包等AI平台之前，优化和润色您的问题。即时获得更清晰、更有效的问题，解锁更高质量的AI回答。
 
@@ -14,6 +15,7 @@
 - 🌐 **广泛兼容：** 支持 ChatGPT、Gemini、Claude、Poe、豆包、DeepSeek 等主流AI平台。
 - ⚡ **实时高效：** 只需一键点击，即可优化您的问题。
 - 🎨 **主题切换：** 支持浅色和深色模式。
+- ⌨️ **快捷操作：** 使用 `Alt+P` (Mac上为 `Option+P`) 快速唤起。
 - 🧩 **轻量安全：** 无后台追踪，不收集用户数据。所有处理均在本地或通过您选择的API完成。(对于免费的API，建议使用OpenRouter)
 - 🌍 **多语言界面：** 目前支持英文和中文。
 

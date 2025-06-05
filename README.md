@@ -1,6 +1,7 @@
 # HelpMeAsk ✨🗣️
 
 **Ask Smarter, Better Answers.**
+[简体中文](./README_zh.md)
 
 **HelpMeAsk** is a lightweight browser extension that helps you refine and polish your questions before sending them to AI platforms like ChatGPT, Gemini, Claude, DeepSeek, Doubao, and more. Get clearer, more effective questions — instantly — and unlock better AI responses.
 
@@ -14,6 +15,7 @@
 - 🌐 **Broad Compatibility:** Works with ChatGPT, Gemini, Claude, Poe, Doubao, DeepSeek, and other popular AI platforms.
 - ⚡ **Real-Time Efficiency:** Enhances your questions with just one click.
 - 🎨 **Customizable Theme:** Light and dark mode available.
+- ⌨️ **Keyboard Shortcut:** Use `Alt+P` (or `Option+P` on Mac) for quick access.
 - 🧩 **Lightweight & Private:** No background tracking or data collection. All processing is done locally or via your chosen API. (for free one, check this: [https://github.com/cheahjs/free-llm-api-resources](https://github.com/cheahjs/free-llm-api-resources). OpenRouter is supported)
 - 🌍 **Multilingual Interface:** Supports English and Chinese.
 
