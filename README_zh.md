@@ -2,7 +2,7 @@
 
 **问得好，答得妙。**
 
-**HelpMeAsk** 是一款轻巧的浏览器扩展程序，旨在帮助您在将问题发送给 ChatGPT、Gemini、Claude、Poe、豆包等AI平台之前，优化和润色您的问题。即时获得更清晰、更有效的问题，解锁更高质量的AI回答。
+**HelpMeAsk** 是一款轻巧的浏览器扩展程序，旨在帮助您在将问题发送给 ChatGPT、Gemini、Claude、DeepSeek、豆包等AI平台之前，优化和润色您的问题。即时获得更清晰、更有效的问题，解锁更高质量的AI回答。
 
 ---
 
@@ -11,10 +11,10 @@
 - 💡 **智能浮现：** 自动出现在AI聊天输入框附近。
 - ✍️ **一键优化：** 将您的输入重写为更适合AI理解和回答的有效问题。
 - ✨ **多种风格：** 提供多种优化风格（如平衡、创意、简洁、编程模式），满足不同场景需求。
-- 🌐 **广泛兼容：** 支持 ChatGPT、Gemini、Claude、Poe、豆包、Kimi Chat、DeepSeek 等主流AI平台。
+- 🌐 **广泛兼容：** 支持 ChatGPT、Gemini、Claude、Poe、豆包、DeepSeek 等主流AI平台。
 - ⚡ **实时高效：** 只需一键点击，即可优化您的问题。
 - 🎨 **主题切换：** 支持浅色和深色模式。
-- 🧩 **轻量安全：** 无后台追踪，不收集用户数据。所有处理均在本地或通过您选择的API完成。
+- 🧩 **轻量安全：** 无后台追踪，不收集用户数据。所有处理均在本地或通过您选择的API完成。(对于免费的API，建议使用OpenRouter)
 - 🌍 **多语言界面：** 目前支持英文和中文。
 
 ---
@@ -32,12 +32,12 @@
 2.  **或，手动安装 (适用于开发者或抢先体验)：**
     * 下载或克隆此仓库：
         ```bash
-        git clone https://github.com/HughYau/HelpMeAsk_extension.git
+        git clone https://github.com/HughYau/HelpMeAsk.git
         ```
     * 打开您的浏览器 (Chrome/Edge/Brave)。
     * 访问 `chrome://extensions/` (适用于 Chrome/Brave) 或 `edge://extensions/` (适用于 Edge)。
     * 启用 **开发者模式** (通常在页面右上角的开关)。
-    * 点击 **“加载已解压的扩展程序”**，然后选择您克隆/下载的扩展文件所在文件夹 (例如 `HelpMeAsk_extension` 文件夹)。
+    * 点击 **“加载已解压的扩展程序”**，然后选择您克隆/下载的扩展文件所在文件夹 (例如 `HelpMeAsk` 文件夹)。
     * 完成! ✅ 您应该能在浏览器的工具栏中看到 HelpMeAsk 图标。
 
 ---

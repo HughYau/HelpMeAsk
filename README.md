@@ -1,8 +1,8 @@
 # HelpMeAsk ✨🗣️
 
-**Ask Smarter, Get Better Answers.**
+**Ask Smarter, Better Answers.**
 
-**HelpMeAsk** is a lightweight browser extension that helps you refine and polish your questions before sending them to AI platforms like ChatGPT, Gemini, Claude, Poe, Doubao, and more. Get clearer, more effective questions — instantly — and unlock better AI responses.
+**HelpMeAsk** is a lightweight browser extension that helps you refine and polish your questions before sending them to AI platforms like ChatGPT, Gemini, Claude, DeepSeek, Doubao, and more. Get clearer, more effective questions — instantly — and unlock better AI responses.
 
 ---
 
@@ -11,20 +11,16 @@
 - 💡 **Smart Suggestions:** Automatically appears near AI chat input boxes.
 - ✍️ **One-Click Refinement:** Rewrites your input into a more effective question for AI.
 - ✨ **Multiple Styles:** Choose different refinement styles (e.g., balanced, creative, concise, programming) to suit your needs.
-- 🌐 **Broad Compatibility:** Works with ChatGPT, Gemini, Claude, Poe, Doubao, Kimi Chat, DeepSeek, and other popular AI platforms.
+- 🌐 **Broad Compatibility:** Works with ChatGPT, Gemini, Claude, Poe, Doubao, DeepSeek, and other popular AI platforms.
 - ⚡ **Real-Time Efficiency:** Enhances your questions with just one click.
 - 🎨 **Customizable Theme:** Light and dark mode available.
-- ⌨️ **Keyboard Shortcut:** Use `Alt+P` (or `Option+P` on Mac) for quick access.
-- 🧩 **Lightweight & Private:** No background tracking or data collection. All processing is done locally or via your chosen API.
+- 🧩 **Lightweight & Private:** No background tracking or data collection. All processing is done locally or via your chosen API. (for free one, check this: [https://github.com/cheahjs/free-llm-api-resources](https://github.com/cheahjs/free-llm-api-resources). OpenRouter is supported)
 - 🌍 **Multilingual Interface:** Supports English and Chinese.
 
 ---
 
 ## 📸 Screenshots & Demo
 
-**(It's highly recommended to insert a GIF or short video here showing HelpMeAsk in action! For example: a before-and-after of a question being refined.)**
-
-* * 
 ---
 
 ## 🛠 Installation
@@ -36,12 +32,12 @@
 2.  **Or, Install Manually (for developers or early access):**
     * Download or clone this repository:
         ```bash
-        git clone https://github.com/HughYau/HelpMeAsk_extension.git
+        git clone https://github.com/HughYau/HelpMeAsk.git
         ```
     * Open your browser (Chrome/Edge/Brave).
     * Navigate to `chrome://extensions/` (for Chrome/Brave) or `edge://extensions/` (for Edge).
     * Enable **Developer Mode** (usually a toggle switch in the top right).
-    * Click **"Load unpacked"** and select the folder where you cloned/downloaded the extension files (e.g., the `HelpMeAsk_extension` folder).
+    * Click **"Load unpacked"** and select the folder where you cloned/downloaded the extension files (e.g., the `HelpMeAsk` folder).
     * Done! ✅ You should see the HelpMeAsk icon in your browser's toolbar.
 
 ---

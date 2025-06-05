@@ -2,31 +2,40 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Settings</title>
+  <title>HelpMeAsk Settings</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
+      /* 色彩灵感来自 HelpMeAsk Logo */
       --font-family-main: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       
-      /* Dark Theme Palette */
-      --bg-color: #1e2124; /* Main background of the popup window */
-      --card-bg-color: #282b30; /* Background of the settings card */
-      --input-bg-color: #3a3f44; /* Background for input fields */
-      --input-border-color: #4a4e53;
-      --input-focus-border-color: #49D4C4; /* Teal accent */
-      --input-focus-shadow: 0 0 0 0.2rem rgba(73, 212, 196, 0.25);
-      --text-color-primary: #e0e0e0; /* Primary text (labels, values) */
-      --text-color-secondary: #a0a0a0; /* Secondary text (hints, placeholders) */
-      --accent-color: #49D4C4; /* Teal */
-      --accent-hover-color: #3AC2B2;
-      --button-text-color: #1e2124; /* Dark text on accent buttons */
-      --success-color: #28a745;
-      --error-color: #dc3545;
-      --success-bg-color: rgba(40, 167, 69, 0.1);
-      --error-bg-color: rgba(220, 53, 69, 0.1);
-      --divider-color: #3a3f44;
+      /* 主题色板 - 明亮主题 */
+      --primary-blue: #3B82F6; /* Logo 的主蓝色 (类似 Tailwind blue-500) */
+      --primary-blue-darker: #2563EB; /* 用于按钮悬停 (类似 Tailwind blue-600) */
+      --accent-yellow: #FBBF24; /* Logo 的星光黄色 (类似 Tailwind amber-400) */
+      
+      --bg-color: #F3F4F6; /* 非常浅的灰色背景 (类似 Tailwind gray-100) */
+      --card-bg-color: #FFFFFF; /* 卡片背景 - 白色 */
+      
+      --input-bg-color: #F9FAFB; /* 输入框背景 (类似 Tailwind gray-50) */
+      --input-border-color: #D1D5DB; /* 输入框边框 (类似 Tailwind gray-300) */
+      --input-focus-border-color: var(--primary-blue);
+      --input-focus-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25); /* 蓝色焦点阴影 */
+      
+      --text-color-primary: #1F2937; /* 主要文字颜色 (类似 Tailwind gray-800) */
+      --text-color-secondary: #4B5563; /* 次要文字颜色 (类似 Tailwind gray-600) */
+      --text-color-placeholder: #9CA3AF; /* 占位符文字 (类似 Tailwind gray-400) */
+      
+      --button-text-color: #FFFFFF; /* 按钮文字颜色 - 白色 */
+      
+      --success-color: #10B981; /* (类似 Tailwind green-500) */
+      --error-color: #EF4444; /* (类似 Tailwind red-500) */
+      --success-bg-color: #D1FAE5; /* (类似 Tailwind green-100) */
+      --error-bg-color: #FEE2E2; /* (类似 Tailwind red-100) */
+      
+      --divider-color: #E5E7EB; /* 分割线颜色 (类似 Tailwind gray-200) */
     }
 
     body {
@@ -34,55 +43,94 @@
       background-color: var(--bg-color);
       color: var(--text-color-primary);
       margin: 0;
-      padding: 16px; /* Padding around the card */
+      padding: 0; /* 移除内边距，让 container 自己控制 */
       display: flex;
       justify-content: center;
-      align-items: flex-start;
-      min-height: calc(100vh - 32px); /* Adjust for padding */
+      align-items: flex-start; /* 从顶部开始对齐 */
+      min-height: 100vh;
       box-sizing: border-box;
-      width: 420px; /* Increased width for better layout */
+      width: 450px; /* 稍微加宽一点以便容纳Logo和更舒适的布局 */
     }
 
     .container {
       background-color: var(--card-bg-color);
-      padding: 24px;
-      border-radius: 12px; /* Softer radius */
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      padding: 20px 28px 28px 28px; /* 上、左右、下 */
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       width: 100%;
-      max-width: 380px; /* Max width of the card */
+      max-width: 420px; /* 限制卡片最大宽度 */
       box-sizing: border-box;
+      margin-top: 16px; /* 与浏览器窗口顶部留出一些间距 */
+      margin-bottom: 16px;
     }
 
-    h3 {
-      color: var(--accent-color);
-      text-align: center;
-      margin-top: 0;
-      margin-bottom: 30px;
-      font-size: 1.6em;
-      font-weight: 600;
-      letter-spacing: -0.5px;
+    .header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 28px;
     }
+
+    .logo-container {
+      margin-right: 12px;
+      /* 假设你的logo是正方形或接近正方形 */
+    }
+
+    .logo-container img {
+      width: 48px; /* Logo 尺寸 */
+      height: 48px;
+      border-radius: 8px; /* 轻微圆角 */
+    }
+
+    .plugin-title {
+      font-size: 1.6em; /* 约 25.6px */
+      font-weight: 700;
+      color: var(--primary-blue);
+      line-height: 1.2;
+    }
+    .plugin-title small {
+        font-size: 0.6em; /* 副标题/Slogan */
+        font-weight: 500;
+        color: var(--text-color-secondary);
+        display: block;
+        margin-top: 2px;
+    }
+
+
+    .form-section-title {
+        font-size: 0.8em; /* 约 12.8px */
+        font-weight: 600;
+        color: var(--primary-blue);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-top: 24px;
+        margin-bottom: 12px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid var(--divider-color);
+    }
+     .form-section-title:first-of-type {
+        margin-top: 0; /* 第一个 section title 不需要上边距 */
+    }
+
 
     .form-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr; /* Two columns */
-      gap: 18px 12px; /* Row gap, Column gap */
-      margin-bottom: 20px;
+      grid-template-columns: 1fr 1fr; /* 两列 */
+      gap: 20px 16px; /* 行间距, 列间距 */
     }
 
     .form-group {
-      /* Removed margin-bottom as gap is handled by grid */
+      /* 间距由 grid-gap 控制 */
     }
     
     .form-group.full-width {
-      grid-column: 1 / -1; /* Span both columns */
+      grid-column: 1 / -1; /* 占据整行 */
     }
 
     label {
       display: block;
       margin-bottom: 8px;
       font-weight: 500;
-      font-size: 0.875em; /* 14px */
+      font-size: 0.95em; /* 约 15.2px, 比之前稍大 */
       color: var(--text-color-secondary);
     }
 
@@ -90,11 +138,11 @@
     input[type="password"],
     select {
       width: 100%;
-      padding: 10px 14px;
+      padding: 12px 14px; /* 增加内边距 */
       border: 1px solid var(--input-border-color);
       border-radius: 8px;
       box-sizing: border-box;
-      font-size: 0.9375em; /* 15px */
+      font-size: 1em; /* 约 16px */
       font-family: var(--font-family-main);
       background-color: var(--input-bg-color);
       color: var(--text-color-primary);
@@ -102,8 +150,8 @@
     }
     
     input::placeholder {
-        color: var(--text-color-secondary);
-        opacity: 0.7;
+        color: var(--text-color-placeholder);
+        opacity: 1; /* 确保颜色生效 */
     }
 
     input[type="text"]:focus,
@@ -116,52 +164,53 @@
 
     select {
       appearance: none;
-      background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%208l5%205%205-5z%22%20fill%3D%22%23909090%22%2F%3E%3C%2Fsvg%3E'); /* Darker arrow for dark theme */
+      background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%208l5%205%205-5z%22%20fill%3D%22%236B7280%22%2F%3E%3C%2Fsvg%3E'); /* 灰色箭头 (Tailwind gray-500) */
       background-repeat: no-repeat;
       background-position: right 12px center;
-      background-size: 12px;
-      padding-right: 35px;
+      background-size: 14px; /* 稍微增大箭头 */
+      padding-right: 40px; /* 为箭头留出更多空间 */
     }
     
     small#modelHint {
-      font-size: 0.8em; /* 12.8px */
+      font-size: 0.875em; /* 约 14px */
       color: var(--text-color-secondary);
       display: block;
-      margin-top: 6px;
-      line-height: 1.4;
+      margin-top: 8px;
+      line-height: 1.5;
     }
 
     button#saveButton {
-      background-color: var(--accent-color);
+      background-color: var(--primary-blue);
       color: var(--button-text-color);
-      padding: 12px 18px;
+      padding: 12px 20px; /* 调整按钮内边距 */
       border: none;
       border-radius: 8px;
       cursor: pointer;
       width: 100%;
-      font-size: 1em; /* 16px */
+      font-size: 1.05em; /* 约 16.8px */
       font-weight: 600;
       transition: background-color 0.2s, transform 0.1s;
-      margin-top: 10px; /* Add some space above the button */
+      margin-top: 28px; /* 与上方元素间距 */
     }
 
     button#saveButton:hover {
-      background-color: var(--accent-hover-color);
+      background-color: var(--primary-blue-darker);
     }
     button#saveButton:active {
       transform: translateY(1px);
     }
 
     .status-message {
-      margin-top: 24px;
-      font-size: 0.875em;
+      margin-top: 20px;
+      font-size: 0.9em; /* 约 14.4px */
       text-align: center;
-      min-height: 1.3em;
-      padding: 10px;
-      border-radius: 6px;
-      visibility: hidden; /* Hidden by default, shown by JS */
+      min-height: 1.5em; /* 确保有足够高度 */
+      padding: 12px;
+      border-radius: 8px;
+      visibility: hidden; 
       opacity: 0;
       transition: opacity 0.3s ease, visibility 0.3s ease;
+      border: 1px solid transparent;
     }
     .status-message.visible {
         visibility: visible;
@@ -170,24 +219,34 @@
     .status-message.success {
       background-color: var(--success-bg-color);
       color: var(--success-color);
-      border: 1px solid var(--success-color);
+      border-color: var(--success-color);
     }
     .status-message.error {
       background-color: var(--error-bg-color);
       color: var(--error-color);
-      border: 1px solid var(--error-color);
+      border-color: var(--error-color);
     }
 
-    .divider {
+    .divider { /* 这个类名原先存在，这里只是确保它生效或可用于新的地方 */
       border-top: 1px solid var(--divider-color);
-      margin: 25px 0;
+      margin: 28px 0;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h3 data-i18n-key="settingsTitle">Promptly Settings</h3>
+    <div class="header">
+      <div class="logo-container">
+        <!-- 确保你的icons文件夹中有 helpmeask_logo.png (或你上传的 helpmeask_logo_blue.jpg) -->
+        <img src="icons/icon128.png" alt="HelpMeAsk Logo"> 
+      </div>
+      <div class="plugin-title">
+        HelpMeAsk
+        <small data-i18n-key="slogan">Ask Smarter, Better Answers.</small>
+      </div>
+    </div>
 
+    <h4 class="form-section-title" data-i18n-key="sectionTitleInterface">Interface Settings</h4>
     <div class="form-grid">
       <div class="form-group">
         <label for="uiLanguage" data-i18n-key="labelUiLanguage">UI Language</label>
@@ -209,9 +268,8 @@
       </div>
     </div>
     
-    <div class="divider"></div>
-
-    <div class="form-group full-width"> <!-- API Provider takes full width for clarity -->
+    <h4 class="form-section-title" data-i18n-key="sectionTitleApi">API Configuration</h4>
+    <div class="form-group full-width" style="margin-bottom: 20px;"> <!-- API Provider 单独一行，增加底部间距 -->
       <label for="apiProvider" data-i18n-key="labelApiProvider">API Provider</label>
       <select id="apiProvider">
         <option value="openai">OpenAI</option>
@@ -229,11 +287,11 @@
         </div>
 
         <div class="form-group">
-          <label for="apiModel" data-i18n-key="labelApiModel">Model Name</label>
+          <label for="apiModel" data-i18n-key="labelApiModel">Model Name (Optional)</label>
           <input type="text" id="apiModel" placeholder="e.g., gpt-4o">
         </div>
     </div>
-    <div class="form-group full-width" style="margin-top: -10px;"> <!-- Hint below the grid -->
+    <div class="form-group full-width" style="margin-top: -10px;"> 
          <small id="modelHint"></small>
     </div>
 
@@ -242,6 +300,6 @@
     <p id="status" class="status-message"></p>
   </div>
 
-  <script src="popup.js"></script> <!-- Will be replaced by popupnew.js content -->
+  <script src="popup.js"></script>
 </body>
 </html>
