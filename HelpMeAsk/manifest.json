@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "HelpMeAsk: Ask Smarter, Better Answers",
   "version": "1.0.0",
-  "description": "Optimize the Prompt you enter in the AI ​​conversation interface by calling the LLM API and provide replacement or regeneration options.",
+  "description": "A lightweight browser extension that helps you refine and polish your questions before sending them to AI platforms.",
   "permissions": [
     "activeTab",
     "scripting",
