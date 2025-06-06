@@ -5,6 +5,8 @@
 
 [English Version](./README_en.md)
 
+![HelpMeAsk Logo](./assets/slogancntran.png)
+
 **HelpMeAsk** 是一款轻巧的浏览器扩展程序，旨在帮助您在将问题发送给 ChatGPT、Gemini、Claude、DeepSeek、豆包等AI平台之前，优化和润色您的问题。即时获得更清晰、更有效的问题，解锁更高质量的AI回答。
 
 ---
@@ -83,7 +85,7 @@
     * 打开您的浏览器 (Chrome/Edge/Brave)。
     * 访问 `chrome://extensions/` (适用于 Chrome/Brave) 或 `edge://extensions/` (适用于 Edge)。
     * 启用 **开发者模式** (通常在页面右上角的开关)。
-    * 点击 **“加载已解压的扩展程序”**，然后选择您克隆/下载的扩展文件所在文件夹 (例如 `HelpMeAsk` 文件夹)。
+    * 点击 **“加载已解压的扩展程序”**，然后选择您克隆/下载的扩展文件所在文件夹 (`HelpMeAsk` 文件夹)。
     * 完成! ✅ 您应该能在浏览器的工具栏中看到 HelpMeAsk 图标。
 
 ---
@@ -137,4 +139,4 @@
 
 ## ⭐️ Star 本项目
 
-如果您觉得 HelpMeAsk 对您有帮助，请在 GitHub 上给它一个 ⭐️！这能帮助更多人发现这个项目，也是对我们持续开发的最大鼓励。谢谢！
+如果您觉得 HelpMeAsk 对您有帮助，请在 GitHub 上给它一个 ⭐️！这能帮助更多人发现这个项目，也是对我持续开发的最大鼓励。谢谢！
