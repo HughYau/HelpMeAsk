@@ -1,6 +1,8 @@
 # HelpMeAsk ✨🗣️
 **Ask Smarter, Better Answers.**
+
 **问得好，答得妙。**
+
 [English Version](./README_en.md)
 
 **HelpMeAsk** 是一款轻巧的浏览器扩展程序，旨在帮助您在将问题发送给 ChatGPT、Gemini、Claude、DeepSeek、豆包等AI平台之前，优化和润色您的问题。即时获得更清晰、更有效的问题，解锁更高质量的AI回答。
@@ -26,8 +28,8 @@
 
 <div style="text-align:center;">
     <img src="./assets/UIzh.png" width="200" style="display:inline-block; margin: 0 10px;">
-  <img src="./assets/egzhdark.png" width="400" style="display:inline-block; margin: 0 10px;">
-  <img src="./assets/egzhlight.png" width="400" style="display:inline-block; margin: 0 10px;">
+  <img src="./assets/egzhdark.png" width="300" style="display:inline-block; margin: 0 10px;">
+  <img src="./assets/egzhlight.png" width="300" style="display:inline-block; margin: 0 10px;">
 </div>
 
 
