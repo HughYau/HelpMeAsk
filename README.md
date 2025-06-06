@@ -5,7 +5,9 @@
 
 [English Version](./README_en.md)
 
-![HelpMeAsk Logo](./assets/slogancntran.png)
+<div align="center">
+  <img src="./assets/slogancntran.png" width="300">
+</div>
 
 **HelpMeAsk** 是一款轻巧的浏览器扩展程序，旨在帮助您在将问题发送给 ChatGPT、Gemini、Claude、DeepSeek、豆包等AI平台之前，优化和润色您的问题。即时获得更清晰、更有效的问题，解锁更高质量的AI回答。
 
