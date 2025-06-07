@@ -7,6 +7,7 @@
 <div align="center">
   <img src="./assets/poster1.png" width="400">
 </div>
+
 **HelpMeAsk** is a lightweight browser extension that helps you refine and polish your questions before sending them to AI platforms like ChatGPT, Gemini, Claude, DeepSeek, Doubao, and more. Get clearer, more effective questions — instantly — and unlock better AI responses.
 
 ---

@@ -9,9 +9,27 @@
   <img src="./assets/slogancntran.png" width="300">
 </div>
 
+**HelpMeAsk** is a lightweight browser extension that helps you refine and polish your questions before sending them to AI platforms like ChatGPT, Gemini, Claude, DeepSeek, Doubao, and more. Get clearer, more effective questions — instantly — and unlock better AI responses.
+
 **HelpMeAsk** 是一款轻巧的浏览器扩展程序，旨在帮助您在将问题发送给 ChatGPT、Gemini、Claude、DeepSeek、豆包等AI平台之前，优化和润色您的问题。即时获得更清晰、更有效的问题，解锁更高质量的AI回答。
 
 ---
+
+## 🚀 Features
+
+- 💡 **Smart Suggestions:** Automatically appears near AI chat input boxes.
+- ✍️ **One-Click Refinement:** Rewrites your input into a more effective question for AI.
+- ✨ **Multiple Styles:** Choose different refinement styles (e.g., balanced, creative, concise, programming) to suit your needs.
+- 🌐 **Broad Compatibility:** Works with ChatGPT, Gemini, Claude, Poe, Doubao, DeepSeek, and other popular AI platforms.
+- ⚡ **Real-Time Efficiency:** Enhances your questions with just one click.
+- 🎨 **Customizable Theme:** Light and dark mode available.
+- ⌨️ **Keyboard Shortcut:** Use `Alt+P` (or `Option+P` on Mac) for quick access.
+- 🧩 **Lightweight & Private:** No background tracking or data collection. All processing is done locally or via your chosen API. (for free one, check this: [https://github.com/cheahjs/free-llm-api-resources](https://github.com/cheahjs/free-llm-api-resources). OpenRouter is supported)
+- 🌍 **Multilingual Interface:** Supports English and Chinese.
+  
+<div align="center">
+  <img src="./assets/poster2.png" width="400">
+</div>
 
 ## 🚀 主要功能
 
@@ -24,7 +42,6 @@
 - ⌨️ **快捷操作：** 使用 `Alt+P` (Mac上为 `Option+P`) 快速唤起。
 - 🧩 **轻量安全：** 无后台追踪，不收集用户数据。所有处理均在本地或通过您选择的API完成。(对于免费的API，建议使用OpenRouter)
 - 🌍 **多语言界面：** 目前支持英文和中文。
-
 ---
 
 ## 📸 截图与演示
