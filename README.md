@@ -159,3 +159,5 @@
 ## ⭐️ Star 本项目
 
 如果您觉得 HelpMeAsk 对您有帮助，请在 GitHub 上给它一个 ⭐️！这能帮助更多人发现这个项目，也是对我持续开发的最大鼓励。谢谢！
+
+<a href="https://www.producthunt.com/products/helpmeask-browser-extension?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-helpmeask&#0045;browser&#0045;extension" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=975227&theme=light&t=1749299072908" alt="HelpMeAsk&#0032;&#0045;&#0032;browser&#0032;extension - Ask&#0032;Smarter&#0044;&#0032;Better&#0032;Answers&#0046; | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
