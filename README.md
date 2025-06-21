@@ -93,7 +93,7 @@
 ## 🛠 安装指南
 
 1.  **从 Chrome 应用商店 / Edge 加载项商店安装：**
-    * [Chrome 应用商店链接] (即将上线!)
+    * [Chrome 应用商店链接](https://chromewebstore.google.com/detail/helpmeask-ask-smarter-bet/icjhpklkejganbbdghcoghanimplidbb)
     * [Edge 加载项商店链接] (即将上线!)
 
 2.  **或，手动安装：**
