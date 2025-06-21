@@ -268,7 +268,7 @@ Feel free to ask if you need further guidance or have specific questions as you 
 ## 🛠 Installation
 
 1.  **Install from Chrome Web Store / Edge Add-ons:**
-    * [Link to Chrome Web Store] (Coming Soon!)
+    * [Link to Chrome Web Store](https://chromewebstore.google.com/detail/helpmeask-ask-smarter-bet/icjhpklkejganbbdghcoghanimplidbb)
     * [Link to Edge Add-ons Store] (Coming Soon!)
 
 2.  **Or, Install Manually:**
